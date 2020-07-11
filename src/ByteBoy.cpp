@@ -1,20 +1,8 @@
 #include "ByteBoy.hpp"
-Game* Game::instance = nullptr;
-Game::Game(Display &display, char* title, const unsigned short* gameIcon, char* description) : 
-		Context(display), gameIcon(gameIcon), description(description), title(title)
+Game::Game(Display &display) : Context(display)
 {
-	instance = this;
 }
-
-const unsigned short* Game::getIcon()
+GameInfo Game::getGameInfo()
 {
-	return instance->gameIcon;
-}
-const char* Game::getTitle()
-{
-	return instance->title;
-}
-const char* Game::getDescription()
-{
-	return instance->description;
+	return info;
 }

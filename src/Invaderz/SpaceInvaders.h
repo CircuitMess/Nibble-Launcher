@@ -27,7 +27,6 @@ public:
 	void start() override;
 	void update(uint) override;
 	void stop() override;
-
 private:
 	Sprite *baseSprite;
 	Image baseImage;

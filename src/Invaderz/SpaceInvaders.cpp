@@ -2,8 +2,9 @@
 #include "sprites.hpp"
 #include "icon.h"
 SpaceInvaders* SpaceInvaders::instance = nullptr;
+GameInfo Game::info = {"Invaderz", "Classic space invaders remake", icon};
 SpaceInvaders::SpaceInvaders(Display& display) :
-		Game(display, "Invaderz", icon, "Classic Space Invaders remake."), baseSprite(display.getBaseSprite()),
+		Game(display), baseSprite(display.getBaseSprite()),
 		baseImage(&screen, screen.getWidth(), screen.getHeight()),
 		buttons(Input::getInstance())
 {
@@ -11,8 +12,8 @@ SpaceInvaders::SpaceInvaders(Display& display) :
 	addSprite(&baseImage);
 	highscoresPath = (char*)calloc(30, 1);
 	strncpy(highscoresPath, "/", 30);
-	if(getTitle()){
-		strncat(highscoresPath, getTitle(), 30);
+	if(info.title){
+		strncat(highscoresPath, info.title, 30);
 	}
 	else
 	{
@@ -1037,3 +1038,4 @@ void SpaceInvaders::enterInitials() {
 		gamestatus = "dataDisplay";
 	}
 }
+

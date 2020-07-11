@@ -14,18 +14,20 @@
 #define NO_KEY '\0'
 #include <Arduino.h>
 #include <Support/Context.h>
+
+struct GameInfo
+{
+	char* title;
+	char* description;
+	const unsigned short* icon;
+};
 class Game : public Context
 {
 public:
-	Game(Display &display,  char* title = nullptr, const unsigned short* gameIcon = nullptr, char* description = nullptr);
-	static const unsigned short *getIcon();
-	static const char* getDescription();
-	static const char* getTitle();
-private:
-	const unsigned short *gameIcon;
-	const char* description;
-	const char* title;
-	static Game* instance;
+	Game(Display &display);
+	static GameInfo getGameInfo();
+protected:
+	static GameInfo info;
 };
 
 #endif

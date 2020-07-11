@@ -9,6 +9,7 @@
 
 struct LauncherItem {
 	Game* game;
+	GameInfo gameInfo;
 	Element* image;
 };
 

@@ -6,7 +6,7 @@ MainMenu* MainMenu::instance = nullptr;
 MainMenu::MainMenu(Display& display) : Context(display), gamesMenu(&screen, 3){
 
 	instance = this;
-	menuItems.push_back({new SpaceInvaders(display), new BitmapElement(&gamesMenu, SpaceInvaders::getIcon(), 40, 40)});
+	menuItems.push_back({nullptr , SpaceInvaders::getGameInfo(), new BitmapElement(&gamesMenu, SpaceInvaders::getGameInfo().icon, 40, 40)});
 	buildUI();
 	pack();
 }
@@ -14,9 +14,12 @@ MainMenu::MainMenu(Display& display) : Context(display), gamesMenu(&screen, 3){
 void MainMenu::start(){
 	Serial.println("start");
 	delay(5);
+	
+	
 	Input::getInstance()->setBtnPressCallback(BTN_A, [](){
 		if(instance == nullptr) return;
 		Serial.println("push");
+		Serial.println(ESP.getFreeHeap());
 		delay(5);
 		Context* app = instance->menuItems[instance->gamesMenu.getSelected()].game;
 		if(app == nullptr) return;
@@ -60,6 +63,12 @@ void MainMenu::unpack(){
 void MainMenu::draw(){
 	// Serial.println("draw");
 	// delay(5);
+	if(gamesMenu.getSprite()->created())
+		Serial.println("created sprite");
+	else
+	{
+		Serial.println("no sprite");
+	}
 	screen.draw();
 	screen.commit();
 	Serial.println("draw done");
@@ -69,8 +78,8 @@ void MainMenu::draw(){
 void MainMenu::fillMenu(){
 	// Serial.println("fill menu");
 	for(auto& item : menuItems){
-		Serial.println(item.game->getTitle());
-		gamesMenu.addItem({ item.game->getTitle(), item.image });
+		Serial.println(item.gameInfo.title);
+		gamesMenu.addItem({item.gameInfo.title, item.image});
 	}
 }
 
@@ -80,7 +89,8 @@ void MainMenu::buildUI(){
 	gamesMenu.setWHType(PARENT, PARENT);
 	gamesMenu.setTitleColor(TFT_RED, TFT_BLACK);
 	gamesMenu.reflow();
-
 	screen.addChild(&gamesMenu);
 	screen.repos();
+
+	
 }

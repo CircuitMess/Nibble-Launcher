@@ -18,15 +18,11 @@ void setup() {
 	gpio_init();
 	i2c.begin(0x74, 4, 5);
 	Serial.begin(115200);
-	display.begin();
 	SPIFFS.begin();
 	UpdateManager::addListener(&buttons);
-
+	display.begin();
+	Serial.println(ESP.getFreeHeap());
 	mainMenu = new MainMenu(display);
-	mainMenu->unpack();
-	mainMenu->start();
-	mainMenu->stop();
-	mainMenu->pack();
 	mainMenu->unpack();
 	mainMenu->start();
 }
