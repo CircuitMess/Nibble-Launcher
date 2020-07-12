@@ -39,7 +39,7 @@ void MainMenu::start(){
 		instance->gamesMenu.selectNext();
 		instance->screen.commit();
 	});
-
+	screen.getSprite()->clear(TFT_BLACK);
 	draw();
 }
 
