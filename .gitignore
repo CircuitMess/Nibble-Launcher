@@ -8,3 +8,5 @@ desktop.ini
 build
 test
 .vs
+.idea
+cmake-build-debug

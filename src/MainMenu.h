@@ -4,12 +4,9 @@
 #include <Arduino.h>
 #include <Support/Context.h>
 #include <Elements/GridMenu.h>
-#include <UI/BitmapElement.h>
-#include "ByteBoy.hpp"
 
 struct LauncherItem {
-	Game* game;
-	GameInfo gameInfo;
+	const char* title;
 	Element* image;
 };
 
@@ -19,7 +16,6 @@ public:
 
 	void start() override;
 	void stop() override;
-	void unpack() override;
 	void draw() override;
 
 private:
