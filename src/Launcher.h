@@ -5,6 +5,9 @@
 #include <CircuitOS.h>
 #include <Update/UpdateListener.h>
 
+class Logo;
+class GameTitle;
+
 class Launcher : public UpdateListener {
 public:
 	Launcher(Display* display);
@@ -14,6 +17,9 @@ public:
 private:
 	Display* display;
 	Sprite* canvas;
+
+	Logo* logo;
+	GameTitle* title;
 
 	void draw();
 
