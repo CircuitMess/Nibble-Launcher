@@ -2,20 +2,61 @@
 #include "ByteBoi.hpp"
 #include <Input/Input.h>
 
+#include "GameScroller.h"
 #include "Elements/Logo.h"
 #include "Elements/GameTitle.h"
 
 Launcher* instance = nullptr;
 
 Launcher::Launcher(Display* display) : display(display), canvas(display->getBaseSprite()),
-		logo(new Logo(canvas)), title(new GameTitle(canvas)){
+		scroller(new GameScroller(canvas, this)), logo(new Logo(canvas)), title(new GameTitle(canvas)){
 
 	instance = this;
+	canvas->setChroma(TFT_TRANSPARENT);
 
 	Input::getInstance()->setBtnPressCallback(BTN_RIGHT, [](){
-		Serial.println("Switching game");
-		instance->title->change();
+		if(instance->switching){
+			instance->queue = RIGHT;
+			return;
+		}
+
+		instance->next();
 	});
+
+	Input::getInstance()->setBtnPressCallback(BTN_LEFT, [](){
+		if(instance->switching){
+			instance->queue = LEFT;
+			return;
+		}
+
+		instance->prev();
+	});
+}
+
+void Launcher::prev(){
+	switching = true;
+	instance->title->change();
+	instance->scroller->prev();
+}
+
+void Launcher::next(){
+	switching = true;
+	instance->title->change();
+	instance->scroller->next();
+}
+
+void Launcher::switched(){
+	if(queue == NONE){
+		switching = false;
+	}else{
+		if(queue == RIGHT){
+			next();
+		}else{
+			prev();
+		}
+
+		queue = NONE;
+	}
 }
 
 void Launcher::update(uint micros){
@@ -27,4 +68,5 @@ void Launcher::draw(){
 	canvas->clear(TFT_BLACK);
 	logo->draw();
 	title->draw();
+	scroller->draw();
 }
