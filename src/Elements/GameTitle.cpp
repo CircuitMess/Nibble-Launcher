@@ -3,7 +3,7 @@
 #include <Display/Sprite.h>
 #include <Update/UpdateManager.h>
 
-GameTitle::GameTitle(Sprite* canvas) : canvas(canvas), x((canvas->width() - width) / 2), y(canvas->height() - height - 5), currentY(y){
+GameTitle::GameTitle(Sprite* canvas) : canvas(canvas), x((canvas->width() - width) / 2), y(canvas->height() - height - 4), currentY(y){
 
 }
 

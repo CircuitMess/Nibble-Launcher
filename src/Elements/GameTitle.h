@@ -5,6 +5,8 @@
 #include <CircuitOS.h>
 #include <Update/UpdateListener.h>
 
+class Sprite;
+
 class GameTitle : public UpdateListener {
 public:
 	GameTitle(Sprite* canvas);
@@ -19,7 +21,7 @@ private:
 	const uint8_t height = 20;
 	const int8_t x;
 	const int8_t y;
-	const float speed = 100;
+	const float speed = 130;
 	const uint8_t overHide = 10;
 
 	Sprite* canvas;

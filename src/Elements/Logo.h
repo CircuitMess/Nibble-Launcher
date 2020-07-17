@@ -14,12 +14,12 @@ public:
 	void draw();
 
 private:
-	const uint8_t width = 100;
-	const uint8_t height = 30;
+	const uint8_t width = 118;
+	const uint8_t height = 20;
 	const int8_t x;
-	const int8_t y = 10;
+	const int8_t y = 7;
 	const float speed = 300;
-	const float amplitude = 5;
+	const float amplitude = 3;
 
 	Sprite* canvas;
 };
