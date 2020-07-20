@@ -25,8 +25,10 @@ private:
 	GameTitle* title;
 	GameScroller* scroller;
 
-	bool switching = false;
-	enum SwitchQueue { NONE, RIGHT, LEFT } queue = NONE;
+	enum Direction { NONE, RIGHT, LEFT };
+
+	Direction switching = NONE;
+	Direction queue = NONE;
 
 	void prev();
 	void next();

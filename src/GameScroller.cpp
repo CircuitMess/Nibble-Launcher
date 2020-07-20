@@ -21,19 +21,37 @@ GameScroller::GameScroller(Sprite* canvas, Launcher* launcher) : canvas(canvas),
 }
 
 void GameScroller::next(){
-	if(delta != 0) return;
+	if(delta != 0 && direction == RIGHT) return;
 
-	getLLGame()->setX(origin - 2 * width - 2 * gutter);
 	direction = RIGHT;
-	UpdateManager::addListener(this);
+
+	if(delta != 0){ // direction == LEFT
+		selectedGame = (selectedGame + 1) % games.size();
+		delta = width + gutter - delta;
+	}else{
+		getLLGame()->setX(origin - 2 * width - 2 * gutter);
+		UpdateManager::addListener(this);
+	}
+
 }
 
 void GameScroller::prev(){
-	if(delta != 0) return;
+	if(delta != 0 && direction == LEFT) return;
 
-	getRRGame()->setX(origin + 2 * width + 2 * gutter);
 	direction = LEFT;
-	UpdateManager::addListener(this);
+
+	if(delta != 0){ // direction == RIGHT
+		if(selectedGame == 0){
+			selectedGame = games.size() - 1;
+		}else{
+			selectedGame--;
+		}
+
+		delta = width + gutter - delta;
+	}else{
+		getRRGame()->setX(origin + 2 * width + 2 * gutter);
+		UpdateManager::addListener(this);
+	}
 }
 
 void GameScroller::draw(){
