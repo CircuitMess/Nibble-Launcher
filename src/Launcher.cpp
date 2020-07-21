@@ -56,6 +56,18 @@ Launcher::Launcher(Display* display) : display(display), canvas(display->getBase
 		instance->prev();
 	});
 
+	Input::getInstance()->setBtnPressCallback(BTN_A, [](){
+		if(instance->scroller->scrolling()) return;
+
+		Display* display = instance->display;
+		uint8_t index = instance->selectedGame;
+		delete instance;
+
+		Context* game = games[index].launch(*display);
+		game->unpack();
+		game->start();
+	});
+
 	title->change(games[selectedGame].title);
 }
 

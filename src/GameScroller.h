@@ -5,6 +5,7 @@
 #include <CircuitOS.h>
 #include <Update/UpdateListener.h>
 #include <Util/Vector.h>
+#include "../GameInfo.hpp"
 
 class Sprite;
 class Launcher;
@@ -12,13 +13,15 @@ class GameImage;
 
 class GameScroller : public UpdateListener {
 public:
-	GameScroller(Sprite* canvas);
+	GameScroller(Sprite* canvas, const GameInfo gameDefs[]);
 
 	void draw();
 	void update(uint micros) override;
 
 	uint8_t prev();
 	uint8_t next();
+
+	bool scrolling();
 
 private:
 	const uint8_t gutter = 20;

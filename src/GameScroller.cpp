@@ -19,7 +19,7 @@ GameScroller::GameScroller(Sprite* canvas, const GameInfo gameDefs[]) : canvas(c
 }
 
 uint8_t GameScroller::prev(){
-	if(delta != 0 && direction == PREV){
+	if(scrolling() && direction == PREV){
 		multiplier = min(2, multiplier+1);
 		queued = true;
 		return (selectedGame < 2) ? games.size() - 2 + selectedGame : selectedGame - 2;
@@ -27,7 +27,7 @@ uint8_t GameScroller::prev(){
 
 	direction = PREV;
 
-	if(delta != 0){ // direction == NEXT
+	if(scrolling()){ // direction == NEXT
 		selectNext();
 		delta = (float) width + (float) gutter - delta;
 		queued = false;
@@ -42,7 +42,7 @@ uint8_t GameScroller::prev(){
 }
 
 uint8_t GameScroller::next(){
-	if(delta != 0 && direction == NEXT){
+	if(scrolling() && direction == NEXT){
 		multiplier = min(2, multiplier+1);
 		queued = true;
 		return (selectedGame + 2) % games.size();
@@ -50,7 +50,7 @@ uint8_t GameScroller::next(){
 
 	direction = NEXT;
 
-	if(delta != 0){ // direction == PREV
+	if(scrolling()){ // direction == PREV
 		selectPrev();
 		delta = (float) width + (float) gutter - delta;
 		queued = false;
@@ -112,6 +112,10 @@ void GameScroller::repos(){
 	getLGame()->setX(origin - width - gutter);
 	getCGame()->setX(origin);
 	getRGame()->setX(origin + width + gutter);
+}
+
+bool GameScroller::scrolling(){
+	return delta != 0;
 }
 
 void GameScroller::selectNext(){
