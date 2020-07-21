@@ -65,6 +65,14 @@ Launcher::Launcher(Display* display) : display(display), canvas(display->getBase
 
 		Context* game = games[index].launch(*display);
 		game->unpack();
+		game->draw();
+
+		Sprite* canvas = display->getBaseSprite();
+		for(int i = 128; i >= 0; i -= 2){
+			canvas->setPos(0, i);
+			display->commit();
+		}
+
 		game->start();
 	});
 
