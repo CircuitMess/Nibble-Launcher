@@ -43,7 +43,7 @@ const GameInfo games[] = {
 Launcher* instance = nullptr;
 
 Launcher::Launcher(Display* display) : display(display), canvas(display->getBaseSprite()),
-		scroller(new GameScroller(canvas, this)), logo(new Logo(canvas)), title(new GameTitle(canvas)){
+		scroller(new GameScroller(canvas, games)), logo(new Logo(canvas)), title(new GameTitle(canvas)){
 
 	instance = this;
 	canvas->setChroma(TFT_TRANSPARENT);
@@ -83,6 +83,6 @@ void Launcher::update(uint micros){
 void Launcher::draw(){
 	canvas->clear(TFT_BLACK);
 	logo->draw();
-	title->draw();
 	scroller->draw();
+	title->draw();
 }

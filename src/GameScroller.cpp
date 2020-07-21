@@ -7,12 +7,11 @@
 
 Color colors[] = { TFT_RED, TFT_BLUE, TFT_YELLOW, TFT_DARKGREEN };
 
-GameScroller::GameScroller(Sprite* canvas) : canvas(canvas),
+GameScroller::GameScroller(Sprite* canvas, const GameInfo gameDefs[]) : canvas(canvas),
 		origin((canvas->width() - width) / 2){
 
-	for(int i = 0; i < 4; i++){
-		games.push_back(new GameImage(canvas));
-		games.back()->setColor(colors[i]);
+	for(int i = 0; i < sizeof(gameDefs); i++){
+		games.push_back(new GameImage(canvas, gameDefs[i].icon));
 		games.back()->setY(37);
 	}
 

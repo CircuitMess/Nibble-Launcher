@@ -1,11 +1,11 @@
 #include "GameImage.h"
 
-GameImage::GameImage(Sprite* canvas) : canvas(canvas){
+GameImage::GameImage(Sprite* canvas, const uint16_t* icon) : canvas(canvas), icon(icon){
 
 }
 
 void GameImage::draw() const {
-	canvas->fillRect(x, y, 60, 60, color);
+	canvas->drawIcon(icon, x, y, 60, 60, 1, TFT_TRANSPARENT);
 }
 
 int16_t GameImage::getX() const{
@@ -22,8 +22,4 @@ int16_t GameImage::getY() const{
 
 void GameImage::setY(int16_t y){
 	GameImage::y = y;
-}
-
-void GameImage::setColor(Color color){
-	GameImage::color = color;
 }

@@ -8,21 +8,19 @@ class Sprite;
 
 class GameImage {
 public:
-	GameImage(Sprite* canvas);
+	GameImage(Sprite* canvas, const uint16_t* icon);
 
 	int16_t getX() const;
 	int16_t getY() const;
 	void setX(int16_t x);
 	void setY(int16_t y);
 
-	void setColor(Color color);
-
 	void draw() const;
 
 private:
 	int16_t x;
 	int16_t y;
-	Color color = TFT_GREEN;
+	const uint16_t* icon;
 
 	Sprite* canvas;
 };
