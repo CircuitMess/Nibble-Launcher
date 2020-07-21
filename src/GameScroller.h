@@ -17,8 +17,8 @@ public:
 	void draw();
 	void update(uint micros) override;
 
-	void prev();
-	void next();
+	uint8_t prev();
+	uint8_t next();
 
 private:
 	const uint8_t gutter = 20;
@@ -31,7 +31,7 @@ private:
 	Vector<GameImage*> games;
 
 	uint selectedGame = 0;
-	enum Direction { RIGHT, LEFT } direction;
+	enum Direction { PREV, NEXT } direction;
 	float delta = 0;
 	bool queued = false;
 	uint8_t multiplier = 1;

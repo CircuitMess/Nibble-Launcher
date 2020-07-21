@@ -17,20 +17,19 @@ GameScroller::GameScroller(Sprite* canvas, Launcher* launcher) : canvas(canvas),
 		games.back()->setY(37);
 	}
 
-	selectedGame = 1;
 	repos();
 }
 
-void GameScroller::prev(){
-	if(delta != 0 && direction == RIGHT){
+uint8_t GameScroller::prev(){
+	if(delta != 0 && direction == PREV){
 		multiplier = min(2, multiplier+1);
 		queued = true;
-		return;
+		return (selectedGame < 2) ? games.size() - 2 + selectedGame : selectedGame - 2;
 	}
 
-	direction = RIGHT;
+	direction = PREV;
 
-	if(delta != 0){ // direction == LEFT
+	if(delta != 0){ // direction == NEXT
 		selectNext();
 		delta = (float) width + (float) gutter - delta;
 		queued = false;
@@ -41,18 +40,19 @@ void GameScroller::prev(){
 		UpdateManager::addListener(this);
 	}
 
+	return (selectedGame < 1) ? games.size() - 1 : selectedGame - 1;
 }
 
-void GameScroller::next(){
-	if(delta != 0 && direction == LEFT){
+uint8_t GameScroller::next(){
+	if(delta != 0 && direction == NEXT){
 		multiplier = min(2, multiplier+1);
 		queued = true;
-		return;
+		return (selectedGame + 2) % games.size();
 	}
 
-	direction = LEFT;
+	direction = NEXT;
 
-	if(delta != 0){ // direction == RIGHT
+	if(delta != 0){ // direction == PREV
 		selectPrev();
 		delta = (float) width + (float) gutter - delta;
 		queued = false;
@@ -62,6 +62,8 @@ void GameScroller::next(){
 		getRRGame()->setX(origin + 2 * width + 2 * gutter);
 		UpdateManager::addListener(this);
 	}
+
+	return (selectedGame + 1) % games.size();
 }
 
 void GameScroller::draw(){
@@ -73,7 +75,7 @@ void GameScroller::draw(){
 void GameScroller::update(uint micros){
 	delta += speed * (micros / 1000000.0f) * (float) multiplier;
 
-	if(direction == RIGHT){
+	if(direction == PREV){
 		getLLGame()->setX(origin - 2 * width - 2 * gutter + delta);
 		getLGame()->setX(origin - width - gutter + delta);
 		getCGame()->setX(origin + delta);
@@ -86,7 +88,7 @@ void GameScroller::update(uint micros){
 	}
 
 	if(delta >= (width + gutter)){
-		if(direction == LEFT){
+		if(direction == NEXT){
 			selectNext();
 		}else{
 			selectPrev();
