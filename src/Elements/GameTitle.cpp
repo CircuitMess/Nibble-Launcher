@@ -7,14 +7,13 @@ GameTitle::GameTitle(Sprite* canvas) : canvas(canvas), x((canvas->width() - widt
 
 }
 
-void GameTitle::change(){
+void GameTitle::change(const char* newText){
+	bool wasChanging = changeTo != nullptr;
+
 	state = DOWN;
+	changeTo = newText;
 
-	if(changeTo){
-		return;
-	}
-
-	changeTo = true;
+	if(wasChanging) return;
 	UpdateManager::addListener(this);
 }
 
@@ -22,15 +21,21 @@ void GameTitle::update(uint micros){
 	currentY += speed * (micros / 1000000.0f) * (state == DOWN ? 1.0f : -1.0f);
 
 	if(state == DOWN && currentY > canvas->height() + overHide){
-		// switch sprite
+		text = changeTo;
 		state = UP;
 	}else if(state == UP && currentY <= y){
 		UpdateManager::removeListener(this);
-		changeTo = false;
+		changeTo = nullptr;
 		currentY = y;
 	}
 }
 
 void GameTitle::draw(){
-	canvas->fillRect(x, currentY, width, height, TFT_GREEN);
+	if(text == nullptr) return;
+
+	canvas->setTextSize(2);
+	canvas->setTextFont(1);
+	canvas->setTextColor(TFT_WHITE);
+	canvas->setCursor(0, currentY);
+	canvas->printCenter(text);
 }

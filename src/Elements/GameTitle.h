@@ -11,7 +11,7 @@ class GameTitle : public UpdateListener {
 public:
 	GameTitle(Sprite* canvas);
 
-	void change();
+	void change(const char* newText);
 
 	void update(uint micros) override;
 	void draw();
@@ -25,10 +25,11 @@ private:
 	const uint8_t overHide = 10;
 
 	Sprite* canvas;
+	const char* text = nullptr;
 
 	float currentY;
 	enum State { DOWN, UP } state;
-	bool changeTo = false; // replace with bitmap ptr
+	const char* changeTo = nullptr;
 
 };
 

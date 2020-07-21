@@ -6,6 +6,40 @@
 #include "Elements/Logo.h"
 #include "Elements/GameTitle.h"
 
+#include "../GameInfo.hpp"
+
+const GameInfo RedInfo {
+		"RED",
+		"",
+		nullptr,
+		[](Display& display) -> Context* { return nullptr; }
+};
+
+const GameInfo BlueInfo {
+		"BLUE",
+		"",
+		nullptr,
+		[](Display& display) -> Context* { return nullptr; }
+};
+
+const GameInfo YellowInfo {
+		"YELLOW",
+		"",
+		nullptr,
+		[](Display& display) -> Context* { return nullptr; }
+};
+
+const GameInfo GreenInfo {
+		"GREEN",
+		"",
+		nullptr,
+		[](Display& display) -> Context* { return nullptr; }
+};
+
+const GameInfo games[] = {
+	RedInfo, BlueInfo, YellowInfo, GreenInfo
+};
+
 Launcher* instance = nullptr;
 
 Launcher::Launcher(Display* display) : display(display), canvas(display->getBaseSprite()),
@@ -21,16 +55,24 @@ Launcher::Launcher(Display* display) : display(display), canvas(display->getBase
 	Input::getInstance()->setBtnPressCallback(BTN_LEFT, [](){
 		instance->prev();
 	});
+
+	title->change(games[selectedGame].title);
 }
 
 void Launcher::prev(){
-	instance->title->change();
-	instance->scroller->prev();
+	uint8_t selecting = instance->scroller->prev();
+	if(selecting != selectedGame){
+		instance->title->change(games[selecting].title);
+	}
+	selectedGame = selecting;
 }
 
 void Launcher::next(){
-	instance->title->change();
-	instance->scroller->next();
+	uint8_t selecting = instance->scroller->next();
+	if(selecting != selectedGame){
+		instance->title->change(games[selecting].title);
+	}
+	selectedGame = selecting;
 }
 
 void Launcher::update(uint micros){

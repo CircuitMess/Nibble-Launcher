@@ -23,6 +23,8 @@ private:
 	GameTitle* title;
 	GameScroller* scroller;
 
+	uint8_t selectedGame = 0;
+
 	void prev();
 	void next();
 
