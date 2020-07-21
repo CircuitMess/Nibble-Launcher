@@ -12,7 +12,7 @@ class GameImage;
 
 class GameScroller : public UpdateListener {
 public:
-	GameScroller(Sprite* canvas, Launcher* launcher);
+	GameScroller(Sprite* canvas);
 
 	void draw();
 	void update(uint micros) override;
@@ -27,7 +27,6 @@ private:
 	const float speed = 150;
 
 	Sprite* canvas;
-	Launcher* launcher;
 	Vector<GameImage*> games;
 
 	uint selectedGame = 0;

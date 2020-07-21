@@ -3,12 +3,11 @@
 #include <Display/Sprite.h>
 #include <Update/UpdateManager.h>
 
-#include "Launcher.h"
 #include "Elements/GameImage.h"
 
 Color colors[] = { TFT_RED, TFT_BLUE, TFT_YELLOW, TFT_DARKGREEN };
 
-GameScroller::GameScroller(Sprite* canvas, Launcher* launcher) : canvas(canvas), launcher(launcher),
+GameScroller::GameScroller(Sprite* canvas) : canvas(canvas),
 		origin((canvas->width() - width) / 2){
 
 	for(int i = 0; i < 4; i++){
