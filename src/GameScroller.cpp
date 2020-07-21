@@ -10,6 +10,7 @@ Color colors[] = { TFT_RED, TFT_BLUE, TFT_YELLOW, TFT_DARKGREEN };
 
 GameScroller::GameScroller(Sprite* canvas, Launcher* launcher) : canvas(canvas), launcher(launcher),
 		origin((canvas->width() - width) / 2){
+
 	for(int i = 0; i < 4; i++){
 		games.push_back(new GameImage(canvas));
 		games.back()->setColor(colors[i]);
@@ -20,35 +21,44 @@ GameScroller::GameScroller(Sprite* canvas, Launcher* launcher) : canvas(canvas),
 	repos();
 }
 
-void GameScroller::next(){
-	if(delta != 0 && direction == RIGHT) return;
+void GameScroller::prev(){
+	if(delta != 0 && direction == RIGHT){
+		multiplier = min(2, multiplier+1);
+		queued = true;
+		return;
+	}
 
 	direction = RIGHT;
 
 	if(delta != 0){ // direction == LEFT
-		selectedGame = (selectedGame + 1) % games.size();
-		delta = width + gutter - delta;
+		selectNext();
+		delta = (float) width + (float) gutter - delta;
+		queued = false;
 	}else{
+		delta = 1;
+		multiplier = 1;
 		getLLGame()->setX(origin - 2 * width - 2 * gutter);
 		UpdateManager::addListener(this);
 	}
 
 }
 
-void GameScroller::prev(){
-	if(delta != 0 && direction == LEFT) return;
+void GameScroller::next(){
+	if(delta != 0 && direction == LEFT){
+		multiplier = min(2, multiplier+1);
+		queued = true;
+		return;
+	}
 
 	direction = LEFT;
 
 	if(delta != 0){ // direction == RIGHT
-		if(selectedGame == 0){
-			selectedGame = games.size() - 1;
-		}else{
-			selectedGame--;
-		}
-
-		delta = width + gutter - delta;
+		selectPrev();
+		delta = (float) width + (float) gutter - delta;
+		queued = false;
 	}else{
+		delta = 1;
+		multiplier = 1;
 		getRRGame()->setX(origin + 2 * width + 2 * gutter);
 		UpdateManager::addListener(this);
 	}
@@ -61,7 +71,7 @@ void GameScroller::draw(){
 }
 
 void GameScroller::update(uint micros){
-	delta += speed * (micros / 1000000.0f);
+	delta += speed * (micros / 1000000.0f) * (float) multiplier;
 
 	if(direction == RIGHT){
 		getLLGame()->setX(origin - 2 * width - 2 * gutter + delta);
@@ -77,19 +87,20 @@ void GameScroller::update(uint micros){
 
 	if(delta >= (width + gutter)){
 		if(direction == LEFT){
-			selectedGame = (selectedGame + 1) % games.size();
+			selectNext();
 		}else{
-			if(selectedGame == 0){
-				selectedGame = games.size() - 1;
-			}else{
-				selectedGame--;
-			}
+			selectPrev();
+		}
+
+		if(queued){
+			queued = false;
+			delta = 1;
+			return;
 		}
 
 		UpdateManager::removeListener(this);
 		delta = 0;
 		repos();
-		launcher->switched();
 	}
 }
 
@@ -101,6 +112,18 @@ void GameScroller::repos(){
 	getLGame()->setX(origin - width - gutter);
 	getCGame()->setX(origin);
 	getRGame()->setX(origin + width + gutter);
+}
+
+void GameScroller::selectNext(){
+	selectedGame = (selectedGame + 1) % games.size();
+}
+
+void GameScroller::selectPrev(){
+	if(selectedGame == 0){
+		selectedGame = games.size() - 1;
+	}else{
+		selectedGame--;
+	}
 }
 
 GameImage* GameScroller::getCGame(){

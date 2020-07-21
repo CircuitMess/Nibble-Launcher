@@ -15,8 +15,6 @@ public:
 
 	void update(uint micros) override;
 
-	void switched();
-
 private:
 	Display* display;
 	Sprite* canvas;
@@ -24,11 +22,6 @@ private:
 	Logo* logo;
 	GameTitle* title;
 	GameScroller* scroller;
-
-	enum Direction { NONE, RIGHT, LEFT };
-
-	Direction switching = NONE;
-	Direction queue = NONE;
 
 	void prev();
 	void next();
