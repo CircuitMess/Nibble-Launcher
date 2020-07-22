@@ -59,6 +59,10 @@ Launcher::Launcher(Display* display) : display(display), canvas(display->getBase
 	Input::getInstance()->setBtnPressCallback(BTN_A, [](){
 		if(instance->scroller->scrolling()) return;
 
+		Input::getInstance()->removeBtnPressCallback(BTN_RIGHT);
+		Input::getInstance()->removeBtnPressCallback(BTN_LEFT);
+		Input::getInstance()->removeBtnPressCallback(BTN_A);
+
 		Display* display = instance->display;
 		uint8_t index = instance->selectedGame;
 		delete instance;
