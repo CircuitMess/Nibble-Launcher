@@ -4,7 +4,7 @@
 #include <Update/UpdateManager.h>
 
 GameTitle::GameTitle(Sprite* canvas) : canvas(canvas), x((canvas->width() - width) / 2), y(canvas->height() - height - 4), currentY(y){
-
+	currentY = canvas->height() + overHide;
 }
 
 void GameTitle::change(const char* newText){
@@ -20,7 +20,9 @@ void GameTitle::change(const char* newText){
 void GameTitle::update(uint micros){
 	currentY += speed * (micros / 1000000.0f) * (state == DOWN ? 1.0f : -1.0f);
 
-	if(state == DOWN && currentY > canvas->height() + overHide){
+	if(state == DOWN && currentY >= canvas->height() + overHide){
+		currentY = canvas->height() + overHide; // correction for first invoke, when micros is exceptionally yuge
+
 		text = changeTo;
 		state = UP;
 	}else if(state == UP && currentY <= y){
@@ -32,6 +34,7 @@ void GameTitle::update(uint micros){
 
 void GameTitle::draw(){
 	if(text == nullptr) return;
+	if(currentY > canvas->height()) return;
 
 	canvas->setTextSize(2);
 	canvas->setTextFont(1);
