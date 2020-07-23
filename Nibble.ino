@@ -4,7 +4,7 @@
 #include <Input/InputI2C.h>
 #include <Update/UpdateManager.h>
 
-#include "src/ByteBoi.hpp"
+#include "src/Nibble.hpp"
 #include "src/Launcher.h"
 
 Display display(128, 128, BL_PIN, 0);

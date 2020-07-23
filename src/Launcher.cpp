@@ -1,11 +1,14 @@
 #include "Launcher.h"
-#include "ByteBoi.hpp"
+#include "Nibble.hpp"
 #include <Input/Input.h>
 
 #include "GameScroller.h"
 #include "Elements/Logo.h"
 #include "Elements/GameTitle.h"
-
+#include "Games/Bonk/GameInfo.hpp"
+#include "Games/SpaceRocks/GameInfo.hpp"
+#include "Games/Snake/GameInfo.hpp"
+#include "Games/Invaderz/GameInfo.hpp"
 #include "../GameInfo.hpp"
 
 const GameInfo RedInfo {
@@ -37,7 +40,7 @@ const GameInfo GreenInfo {
 };
 
 const GameInfo games[] = {
-	RedInfo, BlueInfo, YellowInfo, GreenInfo
+	SnakeInfo, InvaderzInfo, BonkInfo, SpaceRocksInfo
 };
 
 Launcher* instance = nullptr;

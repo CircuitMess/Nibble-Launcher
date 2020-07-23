@@ -1,4 +1,4 @@
-NAME = ByteBoi
+NAME = Nibble
 DIR = .
 PORT = /dev/ttyUSB0
 
