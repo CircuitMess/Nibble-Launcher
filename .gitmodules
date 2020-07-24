@@ -1,0 +1,12 @@
+[submodule "src/Games/Snake"]
+	path = src/Games/Snake
+	url = https://github.com/CircuitMess/Snake-Nibble
+[submodule "src/Games/Bonk"]
+	path = src/Games/Bonk
+	url = https://github.com/CircuitMess/BonK
+[submodule "src/Games/SpaceRocks"]
+	path = src/Games/SpaceRocks
+	url = https://github.com/CircuitMess/SpaceRocks-Nibble
+[submodule "src/Games/Invaderz"]
+	path = src/Games/Invaderz
+	url = https://github.com/CircuitMess/Invaderz-Nibble

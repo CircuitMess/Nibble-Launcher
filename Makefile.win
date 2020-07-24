@@ -1,6 +1,6 @@
 NAME = Nibble
 DIR = .
-PORT = COM414
+PORT = COM6
 
 ACLI = C:\Program Files (x86)\GnuWin32\bin\arduino-cli.exe
 
