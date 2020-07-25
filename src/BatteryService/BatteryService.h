@@ -12,7 +12,7 @@ class BatteryService : public UpdateListener
 public:
 	BatteryService(Display& display);
 	void update(uint _time) override;
-
+	uint getVoltage();
 private:
 	Display* display;
 	Sprite *canvas;

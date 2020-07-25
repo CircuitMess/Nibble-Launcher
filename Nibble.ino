@@ -24,7 +24,7 @@ void setup(){
 	batteryService = new BatteryService(display);
 	UpdateManager::addListener(batteryService);
 	UpdateManager::addListener(&buttons);
-	launcher = new Launcher(&display);
+	launcher = new Launcher(&display, batteryService);
 	launcher->unpack();
 	launcher->start();
 }

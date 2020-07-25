@@ -21,11 +21,11 @@ void BatteryService::update(uint _time)
 	}
 	if (measurementCounter > measurementsSize)
 	{
-		averageVoltage = voltageSum/measurementsSize;
+		averageVoltage = (voltageSum/measurementsSize) / 1024.0 * 1000.0;
 		voltageSum = 0;
 		measurementCounter = 0;
 
-		if(averageVoltage/1024.0 * 1000.0 < 650.0)
+		if(averageVoltage < 650.0)
 		// if(1)
 		{
 			runningContext->stop();
@@ -71,4 +71,8 @@ void BatteryService::drawWarning()
 	canvas->printCenter("Please replace");
 	canvas->setCursor(xOffset + 20, yOffset + 51);
 	canvas->printCenter("batteries.");
+}
+uint BatteryService::getVoltage()
+{
+	return roundl(averageVoltage);
 }

@@ -6,6 +6,7 @@
 #include <Update/UpdateListener.h>
 #include <Support/Context.h>
 
+class BatteryService;
 class Logo;
 class GameTitle;
 class GameScroller;
@@ -13,7 +14,7 @@ extern Context* runningContext;
 
 class Launcher : public UpdateListener, public Context {
 public:
-	Launcher(Display* display);
+	Launcher(Display* display, BatteryService* batteryService);
 
 	void update(uint micros) override;
 	void start() override;
@@ -29,9 +30,10 @@ private:
 	GameScroller* scroller;
 
 	uint8_t selectedGame = 0;
-
 	void prev();
 	void next();
+
+	BatteryService* batteryService;
 };
 
 #endif //BYTEBOI_LAUNCHER_H

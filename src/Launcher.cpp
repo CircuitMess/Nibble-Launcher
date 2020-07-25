@@ -10,6 +10,8 @@
 #include "Games/Snake/GameInfo.hpp"
 #include "Games/Invaderz/GameInfo.hpp"
 #include "../GameInfo.hpp"
+#include "BatteryService/BatteryService.h"
+#include "bitmaps/battery.hpp"
 
 const GameInfo games[] = {
 	InvaderzInfo, BonkInfo, SpaceRocksInfo, SnakeInfo
@@ -17,9 +19,9 @@ const GameInfo games[] = {
 
 Launcher* instance = nullptr;
 
-Launcher::Launcher(Display* display) : Context(*display), display(display), canvas(display->getBaseSprite()),
-		scroller(new GameScroller(canvas, games)), logo(new Logo(canvas)), title(new GameTitle(canvas)){
-
+Launcher::Launcher(Display* display, BatteryService* batteryService) : Context(*display), display(display), canvas(display->getBaseSprite()),
+		scroller(new GameScroller(canvas, games)), logo(new Logo(canvas)), title(new GameTitle(canvas)), batteryService(batteryService)
+{
 	instance = this;
 	canvas->setChroma(TFT_TRANSPARENT);
 	title->change(games[selectedGame].title);
@@ -94,4 +96,16 @@ void Launcher::draw(){
 	logo->draw();
 	scroller->draw();
 	title->draw();
+	if(batteryService->getVoltage() > 780)
+	{
+		canvas->drawMonochromeIcon(battery1, 120, 0, 8, 12, 1, TFT_WHITE);
+	}
+	else if(batteryService->getVoltage() <= 780 && batteryService->getVoltage() >= 700)
+	{
+		canvas->drawMonochromeIcon(battery2, 120, 0, 8, 12, 1, TFT_WHITE);
+	}
+	else if(batteryService->getVoltage() < 680)
+	{
+		canvas->drawMonochromeIcon(battery3, 120, 0, 8, 12, 1, TFT_WHITE);
+	}
 }
