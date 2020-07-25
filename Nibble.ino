@@ -3,15 +3,18 @@
 #include <Input/I2cExpander.h>
 #include <Input/InputI2C.h>
 #include <Update/UpdateManager.h>
+#include <Support/Context.h>
 
 #include "src/Nibble.hpp"
 #include "src/Launcher.h"
+#include "src/BatteryService.h"
 
 Display display(128, 128, BL_PIN, 0);
 I2cExpander i2c;
 InputI2C buttons(&i2c);
 
 Launcher* launcher;
+Context* runningContext = nullptr;
 
 void setup(){
 	Serial.begin(115200);
@@ -19,9 +22,9 @@ void setup(){
 	display.begin();
 
 	UpdateManager::addListener(&buttons);
-
 	launcher = new Launcher(&display);
-	UpdateManager::addListener(launcher);
+	launcher->unpack();
+	launcher->start();
 }
 
 void loop(){

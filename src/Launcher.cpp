@@ -11,46 +11,23 @@
 #include "Games/Invaderz/GameInfo.hpp"
 #include "../GameInfo.hpp"
 
-const GameInfo RedInfo {
-		"RED",
-		"",
-		nullptr,
-		[](Display& display) -> Context* { return nullptr; }
-};
-
-const GameInfo BlueInfo {
-		"BLUE",
-		"",
-		nullptr,
-		[](Display& display) -> Context* { return nullptr; }
-};
-
-const GameInfo YellowInfo {
-		"YELLOW",
-		"",
-		nullptr,
-		[](Display& display) -> Context* { return nullptr; }
-};
-
-const GameInfo GreenInfo {
-		"GREEN",
-		"",
-		nullptr,
-		[](Display& display) -> Context* { return nullptr; }
-};
-
 const GameInfo games[] = {
-	SnakeInfo, InvaderzInfo, BonkInfo, SpaceRocksInfo
+	InvaderzInfo, BonkInfo, SpaceRocksInfo, SnakeInfo
 };
 
 Launcher* instance = nullptr;
 
-Launcher::Launcher(Display* display) : display(display), canvas(display->getBaseSprite()),
+Launcher::Launcher(Display* display) : Context(*display), display(display), canvas(display->getBaseSprite()),
 		scroller(new GameScroller(canvas, games)), logo(new Logo(canvas)), title(new GameTitle(canvas)){
 
 	instance = this;
 	canvas->setChroma(TFT_TRANSPARENT);
+	title->change(games[selectedGame].title);
+}
 
+void Launcher::start()
+{
+	runningContext = this;
 	Input::getInstance()->setBtnPressCallback(BTN_RIGHT, [](){
 		instance->next();
 	});
@@ -62,16 +39,12 @@ Launcher::Launcher(Display* display) : display(display), canvas(display->getBase
 	Input::getInstance()->setBtnPressCallback(BTN_A, [](){
 		if(instance->scroller->scrolling()) return;
 
-		Input::getInstance()->removeBtnPressCallback(BTN_RIGHT);
-		Input::getInstance()->removeBtnPressCallback(BTN_LEFT);
-		Input::getInstance()->removeBtnPressCallback(BTN_A);
-
 		Display* display = instance->display;
 		uint8_t index = instance->selectedGame;
-		delete instance;
+		// delete instance;
 
 		Context* game = games[index].launch(*display);
-		game->unpack();
+		game->push(instance);
 		game->draw();
 
 		Sprite* canvas = display->getBaseSprite();
@@ -81,9 +54,18 @@ Launcher::Launcher(Display* display) : display(display), canvas(display->getBase
 		}
 
 		game->start();
+		runningContext = game;
 	});
 
-	title->change(games[selectedGame].title);
+	UpdateManager::addListener(this);
+}
+
+void Launcher::stop()
+{
+	UpdateManager::removeListener(this);
+	Input::getInstance()->removeBtnPressCallback(BTN_RIGHT);
+	Input::getInstance()->removeBtnPressCallback(BTN_LEFT);
+	Input::getInstance()->removeBtnPressCallback(BTN_A);
 }
 
 void Launcher::prev(){
@@ -104,7 +86,7 @@ void Launcher::next(){
 
 void Launcher::update(uint micros){
 	draw();
-	display->commit();
+	screen.commit();
 }
 
 void Launcher::draw(){

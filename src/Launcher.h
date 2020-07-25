@@ -4,16 +4,21 @@
 #include <Arduino.h>
 #include <CircuitOS.h>
 #include <Update/UpdateListener.h>
+#include <Support/Context.h>
 
 class Logo;
 class GameTitle;
 class GameScroller;
+extern Context* runningContext;
 
-class Launcher : public UpdateListener {
+class Launcher : public UpdateListener, public Context {
 public:
 	Launcher(Display* display);
 
 	void update(uint micros) override;
+	void start() override;
+	void stop() override;
+	void draw() override;
 
 private:
 	Display* display;
@@ -27,10 +32,6 @@ private:
 
 	void prev();
 	void next();
-
-	void draw();
-
 };
-
 
 #endif //BYTEBOI_LAUNCHER_H
