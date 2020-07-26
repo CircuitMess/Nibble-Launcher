@@ -25,8 +25,14 @@ private:
 	bool showWarning = 0;
 	const uint8_t warningWidth = 120;
 	const uint8_t warningHeight = 70;
+	bool warningShown = 0;
+
+	void drawShutdown();
+	bool showShutdown = 0;
+	uint shutdownTime = 0;
 
 	static BatteryService* instance;
+
 };
 
 #endif
