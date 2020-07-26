@@ -39,8 +39,8 @@ void BatteryService::update(uint _time)
 		voltageSum = 0;
 		measurementCounter = 0;
 
-		// if(averageVoltage < 650.0 && !showShutdown)
-		if(1 && !showShutdown)
+		if(averageVoltage < 650.0 && !showShutdown)
+		// if(1 && !showShutdown)
 		{
 			runningContext->stop();
 			showShutdown = 1;
