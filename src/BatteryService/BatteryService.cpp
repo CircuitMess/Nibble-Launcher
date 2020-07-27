@@ -1,5 +1,6 @@
 #include "BatteryService.h"
 #include <Input/Input.h>
+#include <Input/I2cExpander.h>
 #include "../Nibble.hpp"
 
 BatteryService* BatteryService::instance = nullptr;
@@ -21,7 +22,10 @@ void BatteryService::update(uint _time)
 		shutdownTime+=_time;
 		if(shutdownTime >= 5000000)
 		{
-			digitalWrite(BL_PIN, 0);
+			// digitalWrite(BL_PIN, 0);
+			display->getTft()->writecommand(16);
+			I2cExpander::getInstance()->pinWrite(BL_PIN, 0);
+			I2cExpander::getInstance()->portConfig(0xFFFF);
 			ESP.deepSleep(0);
 		}
 		runningContext->draw();
