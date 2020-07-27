@@ -43,19 +43,9 @@ void Launcher::start()
 
 		Display* display = instance->display;
 		uint8_t index = instance->selectedGame;
-		// delete instance;
-
+		
 		Context* game = games[index].launch(*display);
 		game->push(instance);
-		game->draw();
-
-		Sprite* canvas = display->getBaseSprite();
-		for(int i = 128; i >= 0; i -= 2){
-			canvas->setPos(0, i);
-			display->commit();
-		}
-
-		game->start();
 		runningContext = game;
 	});
 

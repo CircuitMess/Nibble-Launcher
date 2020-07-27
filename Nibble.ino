@@ -9,7 +9,7 @@
 #include "src/Launcher.h"
 #include "src/BatteryService/BatteryService.h"
 
-Display display(128, 128, BL_PIN, 0);
+Display display(128, 128, -1, 0);
 I2cExpander i2c;
 InputI2C buttons(&i2c);
 
@@ -19,6 +19,9 @@ BatteryService* batteryService;
 void setup(){
 	Serial.begin(115200);
 	i2c.begin(0x74, 4, 5);
+	i2c.pinMode(8, OUTPUT);
+	i2c.pinWrite(8, 1);
+	
 	display.begin();
 
 	batteryService = new BatteryService(display);
