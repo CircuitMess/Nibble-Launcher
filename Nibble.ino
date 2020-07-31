@@ -17,13 +17,16 @@ Launcher* launcher;
 Context* runningContext = nullptr;
 BatteryService* batteryService;
 SleepService* sleepService;
+
 void setup(){
+	display.begin();
+	display.getBaseSprite()->clear(TFT_BLACK);
+	display.commit();
+
 	Serial.begin(115200);
 	i2c.begin(0x74, 4, 5);
 	i2c.pinMode(BL_PIN, OUTPUT);
 	i2c.pinWrite(BL_PIN, 1);
-	
-	display.begin();
 
 	batteryService = new BatteryService(display);
 	sleepService = new SleepService(display);

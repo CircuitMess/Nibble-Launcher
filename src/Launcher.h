@@ -6,10 +6,12 @@
 #include <Update/UpdateListener.h>
 #include <Support/Context.h>
 
-class BatteryService;
 class Logo;
 class GameTitle;
 class GameScroller;
+class Splash;
+
+class BatteryService;
 extern Context* runningContext;
 
 class Launcher : public UpdateListener, public Context {
@@ -28,10 +30,13 @@ private:
 	Logo* logo;
 	GameTitle* title;
 	GameScroller* scroller;
+	Splash* splash;
 
 	uint8_t selectedGame = 0;
 	void prev();
 	void next();
+
+	void bindInput();
 
 	BatteryService* batteryService;
 };

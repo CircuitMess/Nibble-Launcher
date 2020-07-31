@@ -12,10 +12,17 @@ GameScroller::GameScroller(Sprite* canvas, const GameInfo gameDefs[]) : canvas(c
 
 	for(int i = 0; i < sizeof(gameDefs); i++){
 		games.push_back(new GameImage(canvas, gameDefs[i].icon));
+		games.back()->setX(-width);
 		games.back()->setY(37);
 	}
 
-	repos();
+	// repos();
+}
+
+void GameScroller::splash(float f){
+	getCGame()->setX(f * (float) (origin + width) - width);
+	getLGame()->setX(f * (float) (origin + width) - 2 * width - gutter);
+	getRGame()->setX(f * (float) (origin + width + gutter - (origin + 2*width + 2*gutter)) + origin + 2*width + 2*gutter);
 }
 
 uint8_t GameScroller::prev(){

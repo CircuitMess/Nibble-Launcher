@@ -23,6 +23,8 @@ public:
 
 	bool scrolling();
 
+	void splash(float f);
+
 private:
 	const uint8_t gutter = 20;
 	const uint8_t width = 60;
