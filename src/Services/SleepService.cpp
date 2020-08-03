@@ -11,7 +11,11 @@ SleepService::SleepService(Display& display) : display(&display)
 }
 void SleepService::start()
 {
-	Input::getInstance()->setInactivityCallback(lightSleepTimeout, startLightSleep);
+	setInactivityCallback(lightSleepTimeout, startLightSleep);
+	Input::getInstance()->setAnyKeyCallback([](){
+		instance->inactivityCheck = 0;
+		Serial.println("refresh");
+	});
 }
 void SleepService::startLightSleep()
 {
@@ -19,11 +23,12 @@ void SleepService::startLightSleep()
 	// digitalWrite(BL_PIN, 0);
 	instance->display->getTft()->writecommand(16);
 	I2cExpander::getInstance()->pinWrite(BL_PIN, 0);
-	Input::getInstance()->setActivityCallback(wakeLightSleep);
-	Input::getInstance()->setInactivityCallback(instance->shutdownTimeout, shutdown);
+	Input::getInstance()->setAnyKeyCallback(wakeLightSleep, 1);
+	instance->setInactivityCallback(instance->shutdownTimeout, shutdown);
 }
 void SleepService::wakeLightSleep()
 {
+	Serial.println("wakeLightSleep");
 	runningContext->start();
 	// digitalWrite(BL_PIN, 0);
 	instance->display->getTft()->writecommand(17);
@@ -31,8 +36,11 @@ void SleepService::wakeLightSleep()
 	runningContext->draw();
 	instance->display->commit();
 	I2cExpander::getInstance()->pinWrite(BL_PIN, 1);
-	Input::getInstance()->setActivityCallback(nullptr);
-	Input::getInstance()->setInactivityCallback(instance->lightSleepTimeout, startLightSleep);
+	instance->setInactivityCallback(instance->lightSleepTimeout, startLightSleep);
+	Input::getInstance()->setAnyKeyCallback([](){
+		instance->inactivityCheck = 0;
+		Serial.println("refresh");
+	});
 }
 void SleepService::shutdown()
 {
@@ -40,4 +48,26 @@ void SleepService::shutdown()
 	I2cExpander::getInstance()->pinWrite(BL_PIN, 0);
 	I2cExpander::getInstance()->portConfig(0xFFFF);
 	ESP.deepSleep(0);
+}
+
+void SleepService::update(uint _time)
+{
+	if(inactivityCheck)
+	{
+		inactivityTime+=_time;
+		if(inactivityTime >= inactivityCallbackTime && inactivityCallback != nullptr)
+		{
+			inactivityCallback();
+		}
+	}else{
+		inactivityTime = 0;
+	}
+	inactivityCheck = 1;
+}
+
+void SleepService::setInactivityCallback(uint _time, void(*callback)())
+{
+	inactivityCallback = callback;
+	inactivityCallbackTime = _time;
+	inactivityTime = 0;
 }

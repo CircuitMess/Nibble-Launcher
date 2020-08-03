@@ -10,7 +10,7 @@
 #include "Games/Snake/GameInfo.hpp"
 #include "Games/Invaderz/GameInfo.hpp"
 #include "../GameInfo.hpp"
-#include "BatteryService/BatteryService.h"
+#include "Services/BatteryService.h"
 #include "bitmaps/battery.hpp"
 
 const GameInfo games[] = {
