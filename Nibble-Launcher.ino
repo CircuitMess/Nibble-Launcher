@@ -7,8 +7,8 @@
 
 #include "src/Nibble.hpp"
 #include "src/Launcher.h"
-#include "src/BatteryService/BatteryService.h"
-#include "src/SleepService/SleepService.h"
+#include "src/Services/BatteryService.h"
+#include "src/Services/SleepService.h"
 Display display(128, 128, -1, 0);
 I2cExpander i2c;
 InputI2C buttons(&i2c);
@@ -40,6 +40,8 @@ void setup(){
 	launcher->unpack();
 	launcher->start();
 	sleepService->start();
+	UpdateManager::addListener(sleepService);
+
 
 }
 

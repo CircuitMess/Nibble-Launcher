@@ -7,21 +7,28 @@
 #include <UI/Image.h>
 
 extern Context* runningContext;
-class SleepService
+class SleepService : public UpdateListener
 {
 public:
 	SleepService(Display& display);
 	void start();
+	void update(uint _time);
 private:
 	static void startLightSleep();
 	static void wakeLightSleep();
 	static void shutdown();
+	void setInactivityCallback(uint _time, void(*callback)());
 
 	Display* display;
 
 	static SleepService* instance;
-	const uint lightSleepTimeout = 1000000;
-	const uint shutdownTimeout = 10000000;
+	const uint lightSleepTimeout = 10000000;
+	const uint shutdownTimeout = 20000000;
+
+	void(*inactivityCallback)(void) = nullptr; 
+	uint inactivityTime = 0;
+	bool inactivityCheck = 1;
+	uint inactivityCallbackTime = 0;
 };
 
 #endif
