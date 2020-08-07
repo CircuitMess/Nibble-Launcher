@@ -4,6 +4,7 @@
 #include <Input/InputI2C.h>
 #include <Update/UpdateManager.h>
 #include <Support/Context.h>
+#include <Audio/Piezo.h>
 
 #include "src/Nibble.hpp"
 #include "src/Launcher.h"
@@ -28,6 +29,8 @@ void setup(){
 	i2c.pinMode(BL_PIN, OUTPUT);
 	i2c.pinWrite(BL_PIN, 1);
 
+	Piezo.begin(BUZZ_PIN);
+
 	batteryService = new BatteryService(display);
 	sleepService = new SleepService(display);
 
@@ -44,7 +47,6 @@ void setup(){
 
 
 }
-
 
 void loop(){
 	UpdateManager::update();
