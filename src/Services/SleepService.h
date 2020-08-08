@@ -22,8 +22,8 @@ private:
 	Display* display;
 
 	static SleepService* instance;
-	const uint lightSleepTimeout = 10000000;
-	const uint shutdownTimeout = 20000000;
+	const uint lightSleepTimeout = 30000000;
+	const uint shutdownTimeout = 300000000;
 
 	void(*inactivityCallback)(void) = nullptr; 
 	uint inactivityTime = 0;
