@@ -13,7 +13,7 @@ class GameImage;
 
 class GameScroller : public UpdateListener {
 public:
-	GameScroller(Sprite* canvas, const GameInfo gameDefs[]);
+	GameScroller(Sprite* canvas, const GameInfo gameDefs[], uint8_t gameCount);
 
 	void draw();
 	void update(uint micros) override;

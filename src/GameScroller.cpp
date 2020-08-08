@@ -5,12 +5,10 @@
 
 #include "Elements/GameImage.h"
 
-Color colors[] = { TFT_RED, TFT_BLUE, TFT_YELLOW, TFT_DARKGREEN };
-
-GameScroller::GameScroller(Sprite* canvas, const GameInfo gameDefs[]) : canvas(canvas),
+GameScroller::GameScroller(Sprite* canvas, const GameInfo gameDefs[], uint8_t gameCount) : canvas(canvas),
 		origin((canvas->width() - width) / 2){
 
-	for(int i = 0; i < sizeof(gameDefs); i++){
+	for(int i = 0; i < gameCount; i++){
 		games.push_back(new GameImage(canvas, gameDefs[i].icon));
 		games.back()->setX(-width);
 		games.back()->setY(37);

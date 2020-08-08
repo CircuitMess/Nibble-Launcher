@@ -21,7 +21,7 @@ const GameInfo games[] = {
 Launcher* instance = nullptr;
 
 Launcher::Launcher(Display* display, BatteryService* batteryService) : Context(*display), display(display), canvas(display->getBaseSprite()),
-		scroller(new GameScroller(canvas, games)), logo(new Logo(canvas)), title(new GameTitle(canvas)), batteryService(batteryService)
+		scroller(new GameScroller(canvas, games, sizeof(games) / sizeof(GameInfo))), logo(new Logo(canvas)), title(new GameTitle(canvas)), batteryService(batteryService)
 {
 	instance = this;
 	canvas->setChroma(TFT_TRANSPARENT);
