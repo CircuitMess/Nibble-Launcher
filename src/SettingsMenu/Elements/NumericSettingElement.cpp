@@ -14,7 +14,7 @@ Settings::NumericSettingElement::NumericSettingElement(ElementContainer* parent,
 }
 void Settings::NumericSettingElement::draw()
 {
-	getSprite()->setCursor(getTotalX() + 2, getTotalY());
+	getSprite()->setCursor(getTotalX() + 2, getTotalY() - 1);
 	getSprite()->setTextColor(TFT_BLACK);
 	getSprite()->setTextSize(1);
 	getSprite()->setTextFont(2);
@@ -24,14 +24,14 @@ void Settings::NumericSettingElement::draw()
 	getSprite()->print(parseSeconds(values[currentStep]).c_str());
 	if(blinkToggle)
 	{
-		getSprite()->setCursor(getTotalX() + 2, getTotalY() + 18);
+		getSprite()->setCursor(getTotalX() + 2, getTotalY() + 15);
 		getSprite()->print(parseSeconds(values[0]).c_str());
-		getSprite()->setCursor(getTotalX() + getWidth() - 25, getTotalY() + 18);
+		getSprite()->setCursor(getTotalX() + getWidth() - 25, getTotalY() + 15);
 		getSprite()->print(parseSeconds(values[values.size() - 1]).c_str());
 	}
 
-	getSprite()->drawRect(getTotalX() + 28, getTotalY() + 22, getWidth() - 56, 7, TFT_BLACK);
-	getSprite()->fillRect(getTotalX() + 30, getTotalY() + 24, map(currentStep, 0, numSteps - 1, 0, getWidth() - 60), 3, TFT_BLACK);
+	getSprite()->drawRect(getTotalX() + 28, getTotalY() + 19, getWidth() - 56, 7, TFT_BLACK);
+	getSprite()->fillRect(getTotalX() + 30, getTotalY() + 21, map(currentStep, 0, numSteps - 1, 0, getWidth() - 60), 3, TFT_BLACK);
 	Element::draw();
 }
 std::string Settings::NumericSettingElement::parseSeconds(uint seconds)

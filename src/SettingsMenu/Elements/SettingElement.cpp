@@ -5,6 +5,7 @@ Settings::SettingElement::SettingElement(ElementContainer* parent, Setting* sett
 	blinkTime = 0;
 	active = 0;
 	blinkToggle = 1;
+	// setBorder(1, TFT_RED);
 }
 
 Settings::SettingElement::~SettingElement()

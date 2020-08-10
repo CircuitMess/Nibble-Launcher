@@ -1,5 +1,5 @@
-#ifndef NIBBLE_SLIDER_H
-#define NIBBLE_SLIDER_H,
+#ifndef NIBBLE_NUMERICSETTINGELEMENT_H
+#define NIBBLE_NUMERICSETTINGELEMENT_H,
 #include "SettingElement.h"
 #include "../SettingStruct.hpp"
 namespace Settings

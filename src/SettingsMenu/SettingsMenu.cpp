@@ -1,10 +1,13 @@
 #include "SettingsMenu.h"
 #include "SettingStruct.hpp"
 #include "Elements/NumericSettingElement.h"
+#include "Elements/BoolSettingElement.h"
+
 
 Vector<Setting> settings = {
 	Setting(Setting::Type::NUMERIC, new SettingValueList(Vector<int>{0, 10, 30, 60, 300}), std::string("Sleep")),
-	Setting(Setting::Type::NUMERIC, new SettingValueList(Vector<int>{0, 300, 600, 1800, 3600}), std::string("Shutdown"))
+	Setting(Setting::Type::NUMERIC, new SettingValueList(Vector<int>{0, 300, 600, 1800, 3600}), std::string("Shutdown")),
+	Setting(Setting::Type::BOOLEAN, nullptr, std::string("Audio"))
 };
 
 Settings::SettingsMenu* Settings::SettingsMenu::instance = nullptr;
@@ -27,13 +30,15 @@ Settings::SettingsMenu::SettingsMenu(Display& display) :
 		{
 		case Setting::Type::NUMERIC:
 			element = new Settings::NumericSettingElement(&layout, &settings[i]);
-			elements.push_back(element);
-			layout.addChild(element);
 			break;
-		
+		case Setting::Type::BOOLEAN:
+			element = new Settings::BoolSettingElement(&layout, &settings[i]);
+			break;
 		default:
 			break;
 		}
+		elements.push_back(element);
+		layout.addChild(element);
 	}
 	layout.reposChildren();
 	cursor = 0;
