@@ -10,6 +10,7 @@ class Logo;
 class GameTitle;
 class GameScroller;
 class Splash;
+class Menu;
 
 class BatteryService;
 extern Context* runningContext;
@@ -31,6 +32,8 @@ private:
 	GameTitle* title;
 	GameScroller* scroller;
 	Splash* splash;
+
+	Menu* menu;
 
 	uint8_t selectedGame = 0;
 	void prev();

@@ -12,6 +12,7 @@
 #include "Games/Invaderz/GameInfo.hpp"
 #include "../GameInfo.hpp"
 #include "Services/BatteryService.h"
+#include "Menu.h"
 #include "Bitmaps/battery.hpp"
 
 const GameInfo games[] = {
@@ -27,6 +28,7 @@ Launcher::Launcher(Display* display, BatteryService* batteryService) : Context(*
 	canvas->setChroma(TFT_TRANSPARENT);
 
 	splash = new Splash(display->getBaseSprite(), logo, title, scroller);
+	menu = new Menu(*display);
 }
 
 void Launcher::start(){
@@ -77,8 +79,12 @@ void Launcher::bindInput(){
 		uint8_t index = instance->selectedGame;
 
 		Context* game = games[index].launch(*display);
-		game->push(instance);
 		runningContext = game;
+		game->push(instance);
+
+		Input::getInstance()->setBtnPressCallback(BTN_C, [](){
+			instance->menu->toggle(runningContext);
+		});
 	});
 }
 
