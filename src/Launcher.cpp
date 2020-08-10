@@ -29,6 +29,11 @@ Launcher::Launcher(Display* display, BatteryService* batteryService) : Context(*
 
 	splash = new Splash(display->getBaseSprite(), logo, title, scroller);
 	menu = new Menu(*display);
+
+	Input::getInstance()->setBtnPressCallback(BTN_C, [](){
+		if(runningContext == nullptr || runningContext == instance) return;
+		instance->menu->toggle(runningContext);
+	});
 }
 
 void Launcher::start(){
@@ -81,10 +86,6 @@ void Launcher::bindInput(){
 		Context* game = games[index].launch(*display);
 		runningContext = game;
 		game->push(instance);
-
-		Input::getInstance()->setBtnPressCallback(BTN_C, [](){
-			instance->menu->toggle(runningContext);
-		});
 	});
 }
 
