@@ -11,5 +11,11 @@ struct Setting
 			type(type), params(params), label(label){}
 };
 
+struct SettingValueList
+{
+	Vector<int> values;
+	SettingValueList(Vector<int> values) : values(values){}
+};
+
 
 #endif

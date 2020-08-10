@@ -14,7 +14,6 @@ void SleepService::start()
 	setInactivityCallback(lightSleepTimeout, startLightSleep);
 	Input::getInstance()->setAnyKeyCallback([](){
 		instance->inactivityCheck = 0;
-		Serial.println("refresh");
 	});
 }
 void SleepService::startLightSleep()
@@ -39,7 +38,6 @@ void SleepService::wakeLightSleep()
 	instance->setInactivityCallback(instance->lightSleepTimeout, startLightSleep);
 	Input::getInstance()->setAnyKeyCallback([](){
 		instance->inactivityCheck = 0;
-		Serial.println("refresh");
 	});
 }
 void SleepService::shutdown()

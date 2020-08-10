@@ -19,5 +19,5 @@ const GameInfo SettingsInfo {
 		"Settings",
 		"Change your Nibble's settings.",
 		settingsIcon,
-		[](Display& display) -> Context* { return new SettingsMenu::SettingsMenu(display); }
+		[](Display& display) -> Context* { return new Settings::SettingsMenu(display); }
 };

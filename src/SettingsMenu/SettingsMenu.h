@@ -10,7 +10,8 @@
 #include <UI/Image.h>
 #include <Display/Sprite.h>
 #include <UI/LinearLayout.h>
-namespace SettingsMenu
+#include "Elements/SettingElement.h"
+namespace Settings
 {
 
 class SettingsMenu: public Context, public UpdateListener
@@ -29,6 +30,11 @@ private:
 	Display* display;
 	Sprite* canvas;
 	LinearLayout layout;
+	void setElementCallbacks();
+
+	Vector<Settings::SettingElement*> elements;
+	int cursor;
+
 };
 
 }
