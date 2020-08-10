@@ -11,7 +11,6 @@ Logo::Logo(Sprite* canvas) : canvas(canvas), x((canvas->width() - width) / 2), c
 void Logo::update(uint micros){
 	f += (float) micros / 1000000.0f;
 	if(f > 2 * M_PI) f -= 2 * M_PI;
-	Serial.printf("%.3f\n", f);
 
 	currentY = y + pow(cos(f * 1000.0f / speed), 2) * -amplitude;
 }
