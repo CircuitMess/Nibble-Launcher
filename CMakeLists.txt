@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(Nibble)
+project(Nibble-Launcher)
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -15,6 +15,9 @@ AUX_SOURCE_DIRECTORY(src/SleepService SOURCES)
 AUX_SOURCE_DIRECTORY(src/Elements SOURCES)
 
 add_definitions(-DDEBUG)
+add_definitions(-DCIRCUITOS_LITTLEFS)
+add_definitions(-DCIRCUITOS_TONE)
+add_definitions(-DCIRCUITOS_LOWRAM)
 
-SET_SOURCE_FILES_PROPERTIES(ByteBoi.ino PROPERTIES LANGUAGE CXX)
-add_executable(Nibble ${SOURCES} Nibble.ino)
+SET_SOURCE_FILES_PROPERTIES(Nibble-Launcher.ino PROPERTIES LANGUAGE CXX)
+add_executable(Nibble-Launcher ${SOURCES} Nibble-Launcher.ino)
