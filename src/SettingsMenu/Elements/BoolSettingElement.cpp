@@ -6,7 +6,11 @@
 SettingsMenu::BoolSettingElement::BoolSettingElement(ElementContainer* parent, Setting* setting) :
 		SettingElement(parent, setting)
 {
-	state = *(bool*)(setting->storeLocation);
+	state = 0;
+	if(setting->storeLocation != nullptr)
+	{
+		state = *(bool*)(setting->storeLocation);
+	}
 }
 void SettingsMenu::BoolSettingElement::draw()
 {
@@ -36,6 +40,8 @@ void SettingsMenu::BoolSettingElement::pressLeft()
 	if(!state){
 		state = 1;
 		*((bool*)setting->storeLocation) = state;
+		blinkToggle = 1;
+		blinkTime = 0;
 	}
 }
 void SettingsMenu::BoolSettingElement::pressRight()
@@ -43,6 +49,8 @@ void SettingsMenu::BoolSettingElement::pressRight()
 	if(state){
 		state = 0;
 		*((bool*)setting->storeLocation) = state;
+		blinkToggle = 1;
+		blinkTime = 0;
 	}
 		
 }

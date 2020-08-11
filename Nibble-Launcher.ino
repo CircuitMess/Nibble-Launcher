@@ -4,6 +4,7 @@
 #include <Input/InputI2C.h>
 #include <Update/UpdateManager.h>
 #include <Support/Context.h>
+#include <Audio/Piezo.h>
 
 #include "src/Nibble.hpp"
 #include "src/Launcher.h"
@@ -26,6 +27,14 @@ void setup(){
 	i2c.pinWrite(BL_PIN, 1);
 	
 	display.begin();
+	Piezo.begin(BUZZ_PIN);
+
+	if(!Settings::init(new SettingsStruct, sizeof(SettingsStruct))){
+		settings()->shutdownTime = 300; //5 minutes
+		settings()->sleepTime = 30; //30 seconds
+		settings()->audio = 1; //audio on
+	}
+	Piezo.setMute(settings()->audio);
 
 	batteryService = new BatteryService(display);
 	sleepService = new SleepService(display);
@@ -35,12 +44,6 @@ void setup(){
 
 	launcher = new Launcher(&display, batteryService);
 	runningContext = launcher;
-
-	if(!Settings::init(new SettingsStruct, sizeof(SettingsStruct))){
-		settings()->shutdownTime = 300; //30 seconds
-		settings()->sleepTime = 30; //5 minutes
-		settings()->audio = 1; //audio on
-	}
 
 	launcher->unpack();
 	launcher->start();

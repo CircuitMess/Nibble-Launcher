@@ -2,7 +2,7 @@
 #include <Input/Input.h>
 #include <Input/I2cExpander.h>
 #include "../Nibble.hpp"
-
+#include "../SettingsMenu/SettingsStruct.hpp"
 SleepService* SleepService::instance = nullptr;
 
 SleepService::SleepService(Display& display) : display(&display)
@@ -11,7 +11,8 @@ SleepService::SleepService(Display& display) : display(&display)
 }
 void SleepService::start()
 {
-	setInactivityCallback(lightSleepTimeout, startLightSleep);
+	Serial.println(settings()->sleepTime);
+	setInactivityCallback(settings()->sleepTime*1000000, startLightSleep);
 	Input::getInstance()->setAnyKeyCallback([](){
 		instance->inactivityCheck = 0;
 	});
@@ -23,7 +24,7 @@ void SleepService::startLightSleep()
 	instance->display->getTft()->writecommand(16);
 	I2cExpander::getInstance()->pinWrite(BL_PIN, 0);
 	Input::getInstance()->setAnyKeyCallback(wakeLightSleep, 1);
-	instance->setInactivityCallback(instance->shutdownTimeout, shutdown);
+	instance->setInactivityCallback(settings()->shutdownTime*1000000, shutdown);
 }
 void SleepService::wakeLightSleep()
 {
@@ -35,7 +36,7 @@ void SleepService::wakeLightSleep()
 	runningContext->draw();
 	instance->display->commit();
 	I2cExpander::getInstance()->pinWrite(BL_PIN, 1);
-	instance->setInactivityCallback(instance->lightSleepTimeout, startLightSleep);
+	instance->setInactivityCallback(settings()->sleepTime*1000000, startLightSleep);
 	Input::getInstance()->setAnyKeyCallback([](){
 		instance->inactivityCheck = 0;
 	});
