@@ -7,7 +7,7 @@
 SettingsMenu::NumericSettingElement::NumericSettingElement(ElementContainer* parent, Setting* setting) :
 		SettingElement(parent, setting)
 {
-	values = ((SettingValueList*)setting->params)->values;
+	values = ((NumericSettingParams*)setting->params)->values;
 	numSteps = values.size();
 	currentStep = 0;
 	if(setting->storeLocation != nullptr && values.indexOf(*((int*)setting->storeLocation)) != 0xFFFFFFFF)

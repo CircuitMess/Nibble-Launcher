@@ -14,10 +14,10 @@ struct Setting
 			type(type), params(params), label(label), storeLocation(storeLocation){}
 };
 
-struct SettingValueList
+struct NumericSettingParams
 {
 	Vector<int> values;
-	SettingValueList(Vector<int> values) : values(values){}
+	NumericSettingParams(Vector<int> values) : values(values){}
 };
 }
 

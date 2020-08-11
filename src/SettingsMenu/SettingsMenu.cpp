@@ -17,8 +17,8 @@ SettingsMenu::SettingsMenu::SettingsMenu(Display& display) :
 	instance = this;
 
 	settingsVector = {
-		Setting(Setting::Type::NUMERIC, new SettingValueList(Vector<int>{0, 10, 30, 60, 300}), std::string("Sleep"), &(settings()->sleepTime)),
-		Setting(Setting::Type::NUMERIC, new SettingValueList(Vector<int>{0, 300, 600, 1800, 3600}), std::string("Shutdown"), &(settings()->shutdownTime)),
+		Setting(Setting::Type::NUMERIC, new NumericSettingParams(Vector<int>{0, 10, 30, 60, 300}), std::string("Sleep"), &(settings()->sleepTime)),
+		Setting(Setting::Type::NUMERIC, new NumericSettingParams(Vector<int>{0, 300, 600, 1800, 3600}), std::string("Shutdown"), &(settings()->shutdownTime)),
 		Setting(Setting::Type::BOOLEAN, nullptr, std::string("Audio"), &(settings()->audio))
 	};
 
