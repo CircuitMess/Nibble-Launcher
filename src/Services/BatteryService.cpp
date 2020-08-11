@@ -7,13 +7,20 @@ BatteryService* BatteryService::instance = nullptr;
 
 BatteryService::BatteryService(Display& display) : display(&display), canvas(display.getBaseSprite())
 {
-	averageVoltage = 1024.0;
+	averageVoltage = (float)(analogRead(A0)) / 1024.0 * 1000.0;
 	voltageSum = 0;
 	measurementCounter = 0;
 	showWarning = 0;
 	instance = this;
 	warningShown = 0;
 	showShutdown = 0;
+	Serial.println(averageVoltage);
+	delay(5);
+	if(averageVoltage < 650.0 && !showShutdown)
+	{
+		measurementCounter = measurementsSize + 1;
+		voltageSum = (averageVoltage*1024.0/1000.0) * measurementCounter;
+	}
 }
 void BatteryService::update(uint _time)
 {
@@ -28,12 +35,16 @@ void BatteryService::update(uint _time)
 			I2cExpander::getInstance()->portConfig(0xFFFF);
 			ESP.deepSleep(0);
 		}
-		runningContext->draw();
+		if(runningContext != nullptr){
+			runningContext->draw();
+		}
 		drawShutdown();
 		display->commit();
 	}
 	else if(showWarning){
-		runningContext->draw();
+		if(runningContext != nullptr){
+			runningContext->draw();
+		}
 		drawWarning();
 		display->commit();
 	}
@@ -44,15 +55,18 @@ void BatteryService::update(uint _time)
 		measurementCounter = 0;
 
 		if(averageVoltage < 650.0 && !showShutdown)
-		// if(1 && !showShutdown)
 		{
-			runningContext->stop();
+			if(runningContext != nullptr){
+				runningContext->stop();
+			}
 			showShutdown = 1;
 			shutdownTime = 0;
 		}
 		else if(averageVoltage < 680.0 && !warningShown) //< 650.0 shutdown
 		{
-			runningContext->stop();
+			if(runningContext != nullptr){
+				runningContext->stop();
+			}
 			showWarning = 1;
 			warningShown = 1;
 			Input::getInstance()->setBtnPressCallback(BTN_A, [](){
@@ -60,14 +74,18 @@ void BatteryService::update(uint _time)
 				Input::getInstance()->removeBtnPressCallback(BTN_A);
 				Input::getInstance()->removeBtnPressCallback(BTN_B);
 
-				runningContext->start();
+				if(runningContext != nullptr){
+					runningContext->start();
+				}
 			});
 			Input::getInstance()->setBtnPressCallback(BTN_B, [](){
 				instance->showWarning = 0;
 				Input::getInstance()->removeBtnPressCallback(BTN_A);
 				Input::getInstance()->removeBtnPressCallback(BTN_B);
 
-				runningContext->start();
+				if(runningContext != nullptr){
+					runningContext->start();
+				}
 			});
 		}
 	}
