@@ -29,7 +29,7 @@ private:
 	const uint8_t gutter = 20;
 	const uint8_t width = 60;
 	const uint8_t origin;
-	const float speed = 150;
+	const float speed = 250;
 
 	Sprite* canvas;
 	Vector<GameImage*> games;

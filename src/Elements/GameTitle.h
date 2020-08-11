@@ -21,7 +21,7 @@ private:
 	const uint8_t height = 20;
 	const int8_t x;
 	const int8_t y;
-	const float speed = 130;
+	const float speed = 220;
 	const uint8_t overHide = 10;
 
 	Sprite* canvas;

@@ -10,13 +10,16 @@
 #include "Games/SpaceRocks/GameInfo.hpp"
 #include "Games/Snake/GameInfo.hpp"
 #include "Games/Invaderz/GameInfo.hpp"
+#include "SettingsMenu/GameInfo.hpp"
 #include "../GameInfo.hpp"
 #include "Services/BatteryService.h"
+
 #include "Menu.h"
 #include "Bitmaps/battery.hpp"
 
+
 const GameInfo games[] = {
-	InvaderzInfo, BonkInfo, SpaceRocksInfo, SnakeInfo
+	InvaderzInfo, BonkInfo, SpaceRocksInfo, SettingsInfo, SnakeInfo
 };
 
 Launcher* instance = nullptr;

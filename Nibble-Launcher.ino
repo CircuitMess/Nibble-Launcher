@@ -10,6 +10,8 @@
 #include "src/Launcher.h"
 #include "src/Services/BatteryService.h"
 #include "src/Services/SleepService.h"
+#include "src/SettingsMenu/SettingsStruct.hpp"
+
 Display display(128, 128, -1, 0);
 I2cExpander i2c;
 InputI2C buttons(&i2c);
@@ -30,6 +32,13 @@ void setup(){
 	i2c.pinWrite(BL_PIN, 1);
 
 	Piezo.begin(BUZZ_PIN);
+
+	if(!Settings::init(new SettingsStruct, sizeof(SettingsStruct))){
+		settings()->shutdownTime = 300; //5 minutes
+		settings()->sleepTime = 30; //30 seconds
+		settings()->audio = 1; //audio on
+	}
+	Piezo.setMute(!settings()->audio);
 
 	batteryService = new BatteryService(display);
 	sleepService = new SleepService(display);
