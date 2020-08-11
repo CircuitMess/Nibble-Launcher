@@ -70,3 +70,7 @@ void SleepService::setInactivityCallback(uint _time, void(*callback)())
 	inactivityCallbackTime = _time;
 	inactivityTime = 0;
 }
+SleepService* SleepService::getInstance()
+{
+	return instance;
+}

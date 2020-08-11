@@ -13,6 +13,7 @@ public:
 	SleepService(Display& display);
 	void start();
 	void update(uint _time);
+	static SleepService* getInstance();
 private:
 	static void startLightSleep();
 	static void wakeLightSleep();

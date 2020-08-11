@@ -4,6 +4,7 @@
 #include "Elements/BoolSettingElement.h"
 #include "SettingsStruct.hpp"
 #include <Audio/Piezo.h>
+#include "../Services/SleepService.h"
 
 Vector<SettingsMenu::Setting> settingsVector = {};
 
@@ -69,6 +70,7 @@ void SettingsMenu::SettingsMenu::start()
 	Input::getInstance()->setBtnPressCallback(BTN_B, [](){
 		Settings::store();
 		Piezo.setMute(settings()->audio);
+		SleepService::getInstance()->start();
 		instance->pop();
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_UP, [](){
