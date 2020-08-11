@@ -3,12 +3,12 @@
 #include <string>
 #include <iostream>
 #include <sstream>
-Settings::BoolSettingElement::BoolSettingElement(ElementContainer* parent, Setting* setting) :
+SettingsMenu::BoolSettingElement::BoolSettingElement(ElementContainer* parent, Setting* setting) :
 		SettingElement(parent, setting)
 {
-	state = 1;
+	state = *(bool*)(setting->storeLocation);
 }
-void Settings::BoolSettingElement::draw()
+void SettingsMenu::BoolSettingElement::draw()
 {
 	getSprite()->setCursor(getTotalX() + 2, getTotalY() - 1);
 	getSprite()->setTextColor(TFT_BLACK);
@@ -31,18 +31,21 @@ void Settings::BoolSettingElement::draw()
 	}
 	Element::draw();
 }
-void Settings::BoolSettingElement::pressLeft()
+void SettingsMenu::BoolSettingElement::pressLeft()
 {
-	if(!state) state = 1;
+	if(!state){
+		state = 1;
+		*((bool*)setting->storeLocation) = state;
+	}
 }
-void Settings::BoolSettingElement::pressRight()
+void SettingsMenu::BoolSettingElement::pressRight()
 {
-	if(state) state = 0;
+	if(state){
+		state = 0;
+		*((bool*)setting->storeLocation) = state;
+	}
+		
 }
-void Settings::BoolSettingElement::pressSelect()
+void SettingsMenu::BoolSettingElement::pressSelect()
 {
-}
-void* Settings::BoolSettingElement::getSelection()
-{
-	return &state;
 }

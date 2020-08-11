@@ -1,9 +1,9 @@
 #ifndef NIBBLE_SETTINGELEMENT_H
 #define NIBBLE_SETTINGELEMENT_H
 #include <UI/CustomElement.h>
-#include "../SettingStruct.hpp"
+#include "../Setting.hpp"
 
-namespace Settings
+namespace SettingsMenu
 {
 
 class SettingElement : public CustomElement
@@ -11,7 +11,6 @@ class SettingElement : public CustomElement
 public:
 	SettingElement(ElementContainer* parent, Setting* setting);
 	~SettingElement();
-	virtual void* getSelection() = 0;
 	virtual void setActive(bool _active);
 	virtual void update(uint _time);
 	virtual void pressLeft() = 0;

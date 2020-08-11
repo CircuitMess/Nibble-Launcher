@@ -11,7 +11,7 @@
 #include <Display/Sprite.h>
 #include <UI/LinearLayout.h>
 #include "Elements/SettingElement.h"
-namespace Settings
+namespace SettingsMenu
 {
 
 class SettingsMenu: public Context, public UpdateListener
@@ -32,7 +32,7 @@ private:
 	LinearLayout layout;
 	void setElementCallbacks();
 
-	Vector<Settings::SettingElement*> elements;
+	Vector<SettingElement*> elements;
 	int cursor;
 
 };

@@ -3,16 +3,21 @@
 #include <string>
 #include <iostream>
 #include <sstream>
-Settings::NumericSettingElement::NumericSettingElement(ElementContainer* parent, Setting* setting) :
+#include "../SettingsStruct.hpp"
+SettingsMenu::NumericSettingElement::NumericSettingElement(ElementContainer* parent, Setting* setting) :
 		SettingElement(parent, setting)
 {
 	values = ((SettingValueList*)setting->params)->values;
 	numSteps = values.size();
 	currentStep = 0;
+	if(setting->storeLocation != nullptr && values.indexOf(*((int*)setting->storeLocation)) != 0xFFFFFFFF)
+	{
+		currentStep = max((uint)0, values.indexOf(*((int*)setting->storeLocation)));
+	}
 	blinkTime = 0;
 	active = 0;
 }
-void Settings::NumericSettingElement::draw()
+void SettingsMenu::NumericSettingElement::draw()
 {
 	getSprite()->setCursor(getTotalX() + 2, getTotalY() - 1);
 	getSprite()->setTextColor(TFT_BLACK);
@@ -34,7 +39,7 @@ void Settings::NumericSettingElement::draw()
 	getSprite()->fillRect(getTotalX() + 30, getTotalY() + 21, map(currentStep, 0, numSteps - 1, 0, getWidth() - 60), 3, TFT_BLACK);
 	Element::draw();
 }
-std::string Settings::NumericSettingElement::parseSeconds(uint seconds)
+std::string SettingsMenu::NumericSettingElement::parseSeconds(uint seconds)
 {
 	std::ostringstream str1;
 	if(seconds >= 3600)
@@ -51,18 +56,16 @@ std::string Settings::NumericSettingElement::parseSeconds(uint seconds)
 	}
 	return str1.str();
 }
-void Settings::NumericSettingElement::pressLeft()
+void SettingsMenu::NumericSettingElement::pressLeft()
 {
 	currentStep = max(0, currentStep - 1);
+	*((int*)setting->storeLocation) = values[currentStep];
 }
-void Settings::NumericSettingElement::pressRight()
+void SettingsMenu::NumericSettingElement::pressRight()
 {
 	currentStep = min(numSteps - 1, currentStep + 1);
+	*((int*)setting->storeLocation) = values[currentStep];
 }
-void Settings::NumericSettingElement::pressSelect()
+void SettingsMenu::NumericSettingElement::pressSelect()
 {
-}
-void* Settings::NumericSettingElement::getSelection()
-{
-	return &values[currentStep];
 }

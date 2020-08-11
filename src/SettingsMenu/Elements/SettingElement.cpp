@@ -1,5 +1,5 @@
 #include "SettingElement.h"
-Settings::SettingElement::SettingElement(ElementContainer* parent, Setting* setting) : 
+SettingsMenu::SettingElement::SettingElement(ElementContainer* parent, Setting* setting) : 
 		CustomElement(parent, parent->getAvailableWidth(), 30), setting(setting)
 {
 	blinkTime = 0;
@@ -8,10 +8,10 @@ Settings::SettingElement::SettingElement(ElementContainer* parent, Setting* sett
 	// setBorder(1, TFT_RED);
 }
 
-Settings::SettingElement::~SettingElement()
+SettingsMenu::SettingElement::~SettingElement()
 {
 }
-void Settings::SettingElement::setActive(bool _active)
+void SettingsMenu::SettingElement::setActive(bool _active)
 {
 	blinkTime = 0;
 	if(_active)
@@ -25,7 +25,7 @@ void Settings::SettingElement::setActive(bool _active)
 		blinkToggle = 1;
 	}
 }
-void Settings::SettingElement::updateBlink(uint _time)
+void SettingsMenu::SettingElement::updateBlink(uint _time)
 {
 	if(active)
 	{
@@ -37,11 +37,11 @@ void Settings::SettingElement::updateBlink(uint _time)
 		}
 	}
 }
-void Settings::SettingElement::update(uint _time)
+void SettingsMenu::SettingElement::update(uint _time)
 {
 	updateBlink(_time);
 }
-bool Settings::SettingElement::isActive()
+bool SettingsMenu::SettingElement::isActive()
 {
 	return active;
 }

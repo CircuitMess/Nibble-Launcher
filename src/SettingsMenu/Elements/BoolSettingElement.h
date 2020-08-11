@@ -1,8 +1,8 @@
 #ifndef NIBBLE_BOOLSETTINGELEMENT_H
 #define NIBBLE_BOOLSETTINGELEMENT_H,
 #include "SettingElement.h"
-#include "../SettingStruct.hpp"
-namespace Settings
+#include "../Setting.hpp"
+namespace SettingsMenu
 {
 class BoolSettingElement : public SettingElement
 {
@@ -12,7 +12,6 @@ public:
 	void pressLeft() override;
 	void pressRight() override;
 	void pressSelect() override;
-	void* getSelection() override;
 private:
 	bool state;
 

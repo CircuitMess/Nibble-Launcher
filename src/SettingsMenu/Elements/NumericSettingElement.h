@@ -1,8 +1,8 @@
 #ifndef NIBBLE_NUMERICSETTINGELEMENT_H
-#define NIBBLE_NUMERICSETTINGELEMENT_H,
+#define NIBBLE_NUMERICSETTINGELEMENT_H
 #include "SettingElement.h"
-#include "../SettingStruct.hpp"
-namespace Settings
+#include "../Setting.hpp"
+namespace SettingsMenu
 {
 class NumericSettingElement : public SettingElement
 {
@@ -12,7 +12,6 @@ public:
 	void pressLeft() override;
 	void pressRight() override;
 	void pressSelect() override;
-	void* getSelection() override;
 private:
 	int numSteps;
 	Vector<int> values;

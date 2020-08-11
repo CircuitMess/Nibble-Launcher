@@ -9,6 +9,8 @@
 #include "src/Launcher.h"
 #include "src/Services/BatteryService.h"
 #include "src/Services/SleepService.h"
+#include "src/SettingsMenu/SettingsStruct.hpp"
+
 Display display(128, 128, -1, 0);
 I2cExpander i2c;
 InputI2C buttons(&i2c);
@@ -33,6 +35,12 @@ void setup(){
 
 	launcher = new Launcher(&display, batteryService);
 	runningContext = launcher;
+
+	if(!Settings::init(new SettingsStruct, sizeof(SettingsStruct))){
+		settings()->shutdownTime = 300; //30 seconds
+		settings()->sleepTime = 30; //5 minutes
+		settings()->audio = 1; //audio on
+	}
 
 	launcher->unpack();
 	launcher->start();
