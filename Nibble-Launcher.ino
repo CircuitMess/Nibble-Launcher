@@ -38,7 +38,7 @@ void setup(){
 		settings()->sleepTime = 30; //30 seconds
 		settings()->audio = 1; //audio on
 	}
-	Piezo.setMute(settings()->audio);
+	Piezo.setMute(!settings()->audio);
 
 	batteryService = new BatteryService(display);
 	sleepService = new SleepService(display);

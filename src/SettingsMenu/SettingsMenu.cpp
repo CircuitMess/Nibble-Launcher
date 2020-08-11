@@ -69,7 +69,7 @@ void SettingsMenu::SettingsMenu::start()
 {
 	Input::getInstance()->setBtnPressCallback(BTN_B, [](){
 		Settings::store();
-		Piezo.setMute(settings()->audio);
+		Piezo.setMute(!settings()->audio);
 		SleepService::getInstance()->start();
 		instance->pop();
 	});
