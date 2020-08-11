@@ -4,11 +4,21 @@
 
 #include "../Bitmaps/logo.hpp"
 
-Logo::Logo(Sprite* canvas) : canvas(canvas), x((canvas->width() - width) / 2){
+Logo::Logo(Sprite* canvas) : canvas(canvas), x((canvas->width() - width) / 2), currentY(startY){
 
 }
 
+void Logo::update(uint micros){
+	f += (float) micros / 1000000.0f;
+	if(f > 2 * M_PI) f -= 2 * M_PI;
+
+	currentY = y + pow(cos(f * 1000.0f / speed), 2) * -amplitude;
+}
+
+void Logo::splash(float f){
+	currentY = f * (float) (y - startY) + startY;
+}
+
 void Logo::draw(){
-	double m = micros() / 1000.0;
-	canvas->drawIcon(logo, x, y + pow(cos(m / speed), 2) * amplitude, width, height);
+	canvas->drawIcon(logo, x, currentY, width, height);
 }

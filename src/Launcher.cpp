@@ -2,6 +2,7 @@
 #include "Nibble.hpp"
 #include <Input/Input.h>
 
+#include "Splash.h"
 #include "GameScroller.h"
 #include "Elements/Logo.h"
 #include "Elements/GameTitle.h"
@@ -9,10 +10,13 @@
 #include "Games/SpaceRocks/GameInfo.hpp"
 #include "Games/Snake/GameInfo.hpp"
 #include "Games/Invaderz/GameInfo.hpp"
+#include "SettingsMenu/GameInfo.hpp"
 #include "../GameInfo.hpp"
 #include "Services/BatteryService.h"
-#include "bitmaps/battery.hpp"
-#include "SettingsMenu/GameInfo.hpp"
+
+#include "Menu.h"
+#include "Bitmaps/battery.hpp"
+
 
 const GameInfo games[] = {
 	InvaderzInfo, BonkInfo, SpaceRocksInfo, SettingsInfo, SnakeInfo
@@ -21,35 +25,25 @@ const GameInfo games[] = {
 Launcher* instance = nullptr;
 
 Launcher::Launcher(Display* display, BatteryService* batteryService) : Context(*display), display(display), canvas(display->getBaseSprite()),
-		scroller(new GameScroller(canvas, games)), logo(new Logo(canvas)), title(new GameTitle(canvas)), batteryService(batteryService)
+		scroller(new GameScroller(canvas, games, sizeof(games) / sizeof(GameInfo))), logo(new Logo(canvas)), title(new GameTitle(canvas)), batteryService(batteryService)
 {
 	instance = this;
 	canvas->setChroma(TFT_TRANSPARENT);
-	title->change(games[selectedGame].title);
+
+	splash = new Splash(display->getBaseSprite(), logo, title, scroller);
+	menu = new Menu(*display);
+
+	Input::getInstance()->setBtnPressCallback(BTN_C, [](){
+		if(runningContext == nullptr || runningContext == instance) return;
+		instance->menu->toggle(runningContext);
+	});
 }
 
-void Launcher::start()
-{
+void Launcher::start(){
 	runningContext = this;
-	Input::getInstance()->setBtnPressCallback(BTN_RIGHT, [](){
-		instance->next();
-	});
-
-	Input::getInstance()->setBtnPressCallback(BTN_LEFT, [](){
-		instance->prev();
-	});
-
-	Input::getInstance()->setBtnPressCallback(BTN_A, [](){
-		if(instance->scroller->scrolling()) return;
-
-		Display* display = instance->display;
-		uint8_t index = instance->selectedGame;
-		
-		Context* game = games[index].launch(*display);
-		game->push(instance);
-		runningContext = game;
-	});
-
+	if(splash == nullptr){
+		bindInput();
+	}
 	UpdateManager::addListener(this);
 }
 
@@ -77,16 +71,53 @@ void Launcher::next(){
 	selectedGame = selecting;
 }
 
+void Launcher::bindInput(){
+	Input::getInstance()->setBtnPressCallback(BTN_RIGHT, [](){
+		instance->next();
+	});
+
+	Input::getInstance()->setBtnPressCallback(BTN_LEFT, [](){
+		instance->prev();
+	});
+
+	Input::getInstance()->setBtnPressCallback(BTN_A, [](){
+		if(instance->scroller->scrolling()) return;
+
+		Display* display = instance->display;
+		uint8_t index = instance->selectedGame;
+
+		Context* game = games[index].launch(*display);
+		runningContext = game;
+		game->push(instance);
+	});
+}
+
 void Launcher::update(uint micros){
+	if(splash){
+		splash->update(micros);
+
+		if(splash->done()){
+			delete splash;
+			splash = nullptr;
+
+			bindInput();
+			scroller->splash(1);
+			title->change(games[selectedGame].title);
+		}
+	}else{
+		logo->update(micros);
+	}
+
 	draw();
 	screen.commit();
 }
 
 void Launcher::draw(){
 	canvas->clear(TFT_BLACK);
-	logo->draw();
 	scroller->draw();
 	title->draw();
+	logo->draw();
+
 	if(batteryService->getVoltage() > 780)
 	{
 		canvas->drawMonochromeIcon(battery1, 120, 0, 8, 12, 1, TFT_WHITE);
