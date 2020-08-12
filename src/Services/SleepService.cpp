@@ -12,7 +12,9 @@ SleepService::SleepService(Display& display) : display(&display)
 void SleepService::start()
 {
 	Serial.println(settings()->sleepTime);
-	setInactivityCallback(settings()->sleepTime*1000000, startLightSleep);
+	if(settings()->sleepTime > 0){
+		setInactivityCallback(settings()->sleepTime*1000000, startLightSleep);
+	}
 	Input::getInstance()->setAnyKeyCallback([](){
 		instance->inactivityCheck = 0;
 	});
@@ -24,7 +26,9 @@ void SleepService::startLightSleep()
 	instance->display->getTft()->writecommand(16);
 	I2cExpander::getInstance()->pinWrite(BL_PIN, 0);
 	Input::getInstance()->setAnyKeyCallback(wakeLightSleep, 1);
-	instance->setInactivityCallback(settings()->shutdownTime*1000000, shutdown);
+	if(settings()->shutdownTime > 0){
+		instance->setInactivityCallback(settings()->shutdownTime*1000000, shutdown);
+	}
 }
 void SleepService::wakeLightSleep()
 {

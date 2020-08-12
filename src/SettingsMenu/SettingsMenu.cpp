@@ -12,7 +12,7 @@ SettingsMenu::SettingsMenu* SettingsMenu::SettingsMenu::instance = nullptr;
 
 SettingsMenu::SettingsMenu::SettingsMenu(Display& display) :
 		Context(display), display(&display), canvas(display.getBaseSprite()),
-		layout(LinearLayout(&screen, VERTICAL))
+		layout(new LinearLayout(&screen, VERTICAL))
 {
 	instance = this;
 
@@ -22,29 +22,29 @@ SettingsMenu::SettingsMenu::SettingsMenu(Display& display) :
 		Setting(Setting::Type::BOOLEAN, nullptr, std::string("Audio"), &(settings()->audio))
 	};
 
-	layout.setWHType(PARENT, PARENT);
-	layout.setPadding(3);
-	layout.setGutter(8);
-	layout.reflow();
-	screen.addChild(&layout);
+	layout->setWHType(PARENT, PARENT);
+	layout->setPadding(3);
+	layout->setGutter(8);
+	layout->reflow();
+	screen.addChild(layout);
 	for (uint8_t i = 0; i < settingsVector.size(); i++)
 	{
 		SettingElement* element;
 		switch (settingsVector[i].type)
 		{
 		case Setting::Type::NUMERIC:
-			element = new NumericSettingElement(&layout, &settingsVector[i]);
+			element = new NumericSettingElement(layout, &settingsVector[i]);
 			break;
 		case Setting::Type::BOOLEAN:
-			element = new BoolSettingElement(&layout, &settingsVector[i]);
+			element = new BoolSettingElement(layout, &settingsVector[i]);
 			break;
 		default:
 			break;
 		}
 		elements.push_back(element);
-		layout.addChild(element);
+		layout->addChild(element);
 	}
-	layout.reposChildren();
+	layout->reposChildren();
 	cursor = 0;
 	elements[0]->setActive(1);
 }

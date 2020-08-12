@@ -29,7 +29,7 @@ private:
 	static SettingsMenu* instance;
 	Display* display;
 	Sprite* canvas;
-	LinearLayout layout;
+	LinearLayout *layout;
 	void setElementCallbacks();
 
 	Vector<SettingElement*> elements;
