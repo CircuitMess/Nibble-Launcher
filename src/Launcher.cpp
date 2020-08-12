@@ -40,6 +40,10 @@ Launcher::Launcher(Display* display, BatteryService* batteryService) : Context(*
 }
 
 void Launcher::start(){
+	if(runningContext != nullptr && runningContext != this){
+		delete runningContext;
+	}
+
 	runningContext = this;
 	if(splash == nullptr){
 		bindInput();
