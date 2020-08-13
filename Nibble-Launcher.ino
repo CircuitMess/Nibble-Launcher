@@ -53,8 +53,7 @@ void setup(){
 	// Serial.println(((portRead & 0b1111111) == 0) ? "all pressed" : "not all pressed");
 	// Serial.printf("Calibrated: %d\n", settings()->calibrated);
 	
-	// if(((portRead & 0b1111111) == 1) && !settings()->calibrated)
-	if(1)
+	if(((portRead & 0b1111111) == 1) && !settings()->calibrated)
 	{
 		HardwareTest test = HardwareTest(display);
 		test.start();
