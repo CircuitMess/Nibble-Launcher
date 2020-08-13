@@ -7,6 +7,7 @@ struct SettingsStruct {
 	int sleepTime;
 	int shutdownTime;
 	bool audio;
+	bool calibrated;
 };
 
 SettingsStruct* settings();

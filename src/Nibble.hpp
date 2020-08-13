@@ -12,5 +12,6 @@
 #define BUZZ_PIN 12
 #define BL_PIN 8
 
+// #define DEBUG_FLAG
 
 #endif

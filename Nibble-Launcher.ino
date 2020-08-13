@@ -12,6 +12,8 @@
 #include "src/Services/SleepService.h"
 #include "src/SettingsMenu/SettingsStruct.hpp"
 
+#include "src/HardwareTest.h"
+
 Display display(128, 128, -1, 0);
 I2cExpander i2c;
 InputI2C buttons(&i2c);
@@ -32,12 +34,34 @@ void setup(){
 	i2c.pinWrite(BL_PIN, 1);
 
 	Piezo.begin(BUZZ_PIN);
-
 	if(!Settings::init(new SettingsStruct, sizeof(SettingsStruct))){
 		settings()->shutdownTime = 300; //5 minutes
 		settings()->sleepTime = 30; //30 seconds
 		settings()->audio = 1; //audio on
+		settings()->calibrated = 0;
 	}
+
+#ifdef DEBUG_FLAG
+
+	for(uint8_t i = 0; i < 7; i++)
+	{
+		i2c.pinMode(i, INPUT_PULLUP);
+	}
+	Serial.println();
+	uint16_t portRead = i2c.portRead();
+	Serial.println(portRead, BIN);
+	Serial.println(((portRead & 0b1111111) == 0) ? "all pressed" : "not all pressed");
+	Serial.printf("Calibrated: %d\n", settings()->calibrated);
+	
+	if(((portRead & 0b1111111) == 0) && !settings()->calibrated)
+	{
+		Serial.println("TESTING");
+		HardwareTest test = HardwareTest(display);
+		test.start();
+	}
+
+#endif
+	
 	Piezo.setMute(!settings()->audio);
 
 	batteryService = new BatteryService(display);

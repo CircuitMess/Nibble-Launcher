@@ -14,8 +14,6 @@ BatteryService::BatteryService(Display& display) : display(&display), canvas(dis
 	instance = this;
 	warningShown = 0;
 	showShutdown = 0;
-	Serial.println(averageVoltage);
-	delay(5);
 	if(averageVoltage < 650.0 && !showShutdown)
 	{
 		measurementCounter = measurementsSize + 1;
