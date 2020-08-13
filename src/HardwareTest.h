@@ -16,7 +16,7 @@ private:
 	uint voltageSum = 0;
 	const uint measurementsSize = 100;
 	uint measurementCounter = 0;
-
+	const float actualVoltage = 3.6;
 	void voltageTest();
 	void beeping();
 };

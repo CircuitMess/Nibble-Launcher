@@ -33,7 +33,8 @@ void HardwareTest::start()
 void HardwareTest::voltageTest()
 {
 	bool measureOK = 1;
-	for(measurementCounter = 0; measurementCounter <= measurementsSize; measurementCounter++)
+	voltageSum = 0;
+	for(measurementCounter = 0; measurementCounter < measurementsSize; measurementCounter++)
 	{
 		voltageSum+=analogRead(A0);
 	}
@@ -59,6 +60,7 @@ void HardwareTest::voltageTest()
 	canvas->setTextColor(TFT_BLACK);
 	canvas->setCursor(3, 38);
 	canvas->print("Voltage: ");
+	uint32_t batteryVoltage = (uint32_t)map((uint)averageVoltage, 0, 1000, 0, 5444);
 	if(measureOK)
 	{
 		canvas->setTextColor(TFT_GREEN);
@@ -66,15 +68,20 @@ void HardwareTest::voltageTest()
 	}
 	else
 	{
+		float diff = 3600.0 - (float)batteryVoltage;
 		canvas->setTextColor(TFT_RED);
-		canvas->print("ERROR");
+		canvas->print(batteryVoltage);
 		canvas->setCursor(3, 90);
 		canvas->setTextColor(TFT_RED);
-		canvas->printCenter("ADC ERROR!");
+		canvas->printCenter(diff);
 		canvas->setCursor(3, 108);
+		
+		// canvas->printCenter(abs(diff));
 		canvas->printCenter((float)averageVoltage);
+
 		canvas->setTextColor(TFT_BLACK);
 	}
+	Serial.printf("voltage:%d\n", batteryVoltage);
 	canvas->setTextColor(TFT_BLACK);
 	display->commit();
 	if(!measureOK)
