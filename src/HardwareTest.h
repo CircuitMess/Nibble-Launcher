@@ -1,6 +1,12 @@
 #ifndef NIBBLE_HWTEST_H
 #define NIBBLE_HWTEST_H
 #include <Display/Display.h>
+#include <Util/Vector.h>
+
+struct Test {
+	bool (*test)();
+	const char* name;
+};
 
 class HardwareTest
 {
@@ -12,12 +18,18 @@ private:
 	Sprite *canvas;
 	Display *display;
 
-	double averageVoltage = 0.0;
-	uint voltageSum = 0;
-	const uint measurementsSize = 100;
-	uint measurementCounter = 0;
-	const float actualVoltage = 3.6;
-	void voltageTest();
+	static HardwareTest* test;
+	Vector<Test> tests;
+	const char* currentTest;
+
+	void log(const char* property, char* value);
+	void log(const char* property, float value);
+	void log(const char* property, double value);
+	void log(const char* property, bool value);
+
+	static bool buttonsTest();
+	static bool voltageTest();
+
 	void beeping();
 };
 

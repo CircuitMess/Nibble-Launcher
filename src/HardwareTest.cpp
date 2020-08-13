@@ -1,99 +1,88 @@
 #include "HardwareTest.h"
 #include <Audio/Piezo.h>
 #include "SettingsMenu/SettingsStruct.hpp"
-HardwareTest::HardwareTest(Display &display) : canvas(display.getBaseSprite()), display(&display)
+
+HardwareTest* HardwareTest::test = nullptr;
+
+HardwareTest::HardwareTest(Display &_display) : canvas(_display.getBaseSprite()), display(&_display)
 {
+	test = this;
+
+	tests.push_back({ HardwareTest::buttonsTest, "Buttons" });
+	tests.push_back({ HardwareTest::voltageTest, "Voltage" });
 }
+
 void HardwareTest::start()
 {
-	Serial.println("START");
+	Serial.println();
+	Serial.printf("TEST:begin:%x\n", ESP.getChipId());
+
 	canvas->clear(TFT_WHITE);
 	canvas->setTextColor(TFT_BLACK);
 	canvas->setTextFont(2);
 	canvas->setTextSize(1);
-	canvas->setCursor(0,0);
+	canvas->setCursor(0, 0);
 	canvas->printCenter("TESTING MODE");
-	canvas->setCursor(3, 20);
-	canvas->print("Buttons: ");
-	canvas->setTextColor(TFT_GREEN);
-	canvas->print("OK");
-	canvas->setTextColor(TFT_BLACK);
-	canvas->setCursor(3, 38);
-	canvas->print("Voltage: testing");
+	canvas->setCursor(0, 10);
+	canvas->println();
 	display->commit();
 
-	voltageTest();
-	settings()->calibrated = 1;
-	Settings::store();
-	Serial.println("END");
-	Serial.println("OK");
-	beeping();
-
-}
-void HardwareTest::voltageTest()
-{
-	bool measureOK = 1;
-	voltageSum = 0;
-	for(measurementCounter = 0; measurementCounter < measurementsSize; measurementCounter++)
-	{
-		voltageSum+=analogRead(A0);
-	}
-	averageVoltage = (voltageSum/measurementsSize) / 1024.0 * 1000.0;
-	if(averageVoltage > 700.0 || averageVoltage < 600.0)
-	{
-		measureOK = 0;
-	}
-	else
-	{
-		measureOK = 1;
-	}
-	canvas->clear(TFT_WHITE);
-	canvas->setTextColor(TFT_BLACK);
-	canvas->setTextFont(2);
-	canvas->setTextSize(1);
-	canvas->setCursor(0,0);
-	canvas->printCenter("TESTING MODE");
-	canvas->setCursor(3, 20);
-	canvas->print("Buttons: ");
-	canvas->setTextColor(TFT_GREEN);
-	canvas->print("OK");
-	canvas->setTextColor(TFT_BLACK);
-	canvas->setCursor(3, 38);
-	canvas->print("Voltage: ");
-	uint32_t batteryVoltage = (uint32_t)map((uint)averageVoltage, 0, 1000, 0, 5444);
-	if(measureOK)
-	{
-		canvas->setTextColor(TFT_GREEN);
-		canvas->print("OK");
-	}
-	else
-	{
-		float diff = 3600.0 - (float)batteryVoltage;
-		canvas->setTextColor(TFT_RED);
-		canvas->print(batteryVoltage);
-		canvas->setCursor(3, 90);
-		canvas->setTextColor(TFT_RED);
-		canvas->printCenter(diff);
-		canvas->setCursor(3, 108);
-		
-		// canvas->printCenter(abs(diff));
-		canvas->printCenter((float)averageVoltage);
+	bool pass = true;
+	for(const Test& test : tests){
+		currentTest = test.name;
 
 		canvas->setTextColor(TFT_BLACK);
+		canvas->printf("%s: ", test.name);
+		display->commit();
+
+		bool result = test.test();
+
+		canvas->setTextColor(result ? TFT_GREEN : TFT_RED);
+		canvas->printf("%s\n", result ? "PASS" : "FAIL");
+		display->commit();
+
+		if(!(pass &= result)) break;
 	}
-	Serial.printf("voltage:%d\n", batteryVoltage);
-	canvas->setTextColor(TFT_BLACK);
-	display->commit();
-	if(!measureOK)
-	{
-		Serial.println("END");
-		Serial.println("ERR");
-		while(1)
-		{
-			yield();
-		}
+
+	settings()->calibrated = pass;
+	Settings::store();
+
+	if(pass){
+		Serial.println("TEST:pass");
+		beeping();
+	}else{
+		Serial.printf("TEST:fail:%s\n", currentTest);
 	}
 }
+
+
+bool HardwareTest::buttonsTest(){
+	return true;
+}
+
+bool HardwareTest::voltageTest()
+{
+	const uint measurementCount = 100;
+
+	uint readingSum = 0;
+	for(uint i = 0; i < measurementCount; i++)
+	{
+		readingSum += analogRead(A0);
+	}
+
+	float averageVoltage = (readingSum / measurementCount) / 1024.0 * 1000.0;
+	//averageVoltage = map((uint) averageVoltage, 0, 1000, 0, 5444);
+	averageVoltage = (averageVoltage / 1000.0) * 5444.0;
+
+	// avgReading < 700.0 && avgReading > 600.0;
+	bool measureOK = averageVoltage < 3810.8 && averageVoltage > 3266.4;
+
+	uint diff = 3600 - averageVoltage;
+	test->log("voltage", averageVoltage);
+
+	return measureOK;
+}
+
 void HardwareTest::beeping()
 {
 	uint32_t blinkMillis = millis();
@@ -106,28 +95,6 @@ void HardwareTest::beeping()
 			blinkState = !blinkState;
 		}
 
-		canvas->clear(TFT_WHITE);
-		canvas->setTextColor(TFT_BLACK);
-		canvas->setTextFont(2);
-		canvas->setTextSize(1);
-		canvas->setCursor(0,0);
-		canvas->printCenter("TESTING MODE");
-		canvas->setCursor(3, 20);
-		canvas->print("Buttons: ");
-		canvas->setTextColor(TFT_GREEN);
-		canvas->print("OK");
-		canvas->setTextColor(TFT_BLACK);
-		canvas->setCursor(3, 38);
-		canvas->print("Voltage: ");
-		canvas->setTextColor(TFT_GREEN);
-		canvas->print("OK");
-		canvas->setTextColor(TFT_BLACK);
-		canvas->setCursor(3, 56);
-		canvas->print("Buzzer: ");
-		canvas->setTextColor(TFT_GREEN);
-		canvas->print("beeping!");
-		canvas->setTextColor(TFT_BLACK);
-
 		if(blinkState)
 		{
 			Piezo.tone(440, 50);
@@ -135,9 +102,27 @@ void HardwareTest::beeping()
 			canvas->setTextColor(TFT_GREEN);
 			canvas->printCenter("TEST OK!");
 			canvas->setTextColor(TFT_BLACK);
+		}else{
+			canvas->fillRect(0, 85, 128, 20, TFT_WHITE);
 		}
 		display->commit();
 		yield();
 		
 	}
+}
+
+void HardwareTest::log(const char* property, char* value){
+	Serial.printf("%s:%s:%s\n", currentTest, property, value);
+}
+
+void HardwareTest::log(const char* property, float value){
+	Serial.printf("%s:%s:%f\n", currentTest, property, value);
+}
+
+void HardwareTest::log(const char* property, double value){
+	Serial.printf("%s:%s:%lf\n", currentTest, property, value);
+}
+
+void HardwareTest::log(const char* property, bool value){
+	Serial.printf("%s:%s:%d\n", currentTest, property, value ? 1 : 0);
 }
