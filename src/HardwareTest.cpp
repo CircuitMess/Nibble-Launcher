@@ -52,6 +52,10 @@ void HardwareTest::start()
 		beeping();
 	}else{
 		Serial.printf("TEST:fail:%s\n", currentTest);
+
+		while(true){
+			delay(1000);
+		}
 	}
 }
 
