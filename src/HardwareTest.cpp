@@ -6,6 +6,7 @@ HardwareTest::HardwareTest(Display &display) : canvas(display.getBaseSprite()), 
 }
 void HardwareTest::start()
 {
+	Serial.println("START");
 	canvas->clear(TFT_WHITE);
 	canvas->setTextColor(TFT_BLACK);
 	canvas->setTextFont(2);
@@ -24,6 +25,8 @@ void HardwareTest::start()
 	voltageTest();
 	settings()->calibrated = 1;
 	Settings::store();
+	Serial.println("END");
+	Serial.println("OK");
 	beeping();
 
 }
@@ -34,8 +37,6 @@ void HardwareTest::voltageTest()
 	{
 		voltageSum+=analogRead(A0);
 	}
-	Serial.println(measurementCounter);
-	Serial.println(voltageSum);
 	averageVoltage = (voltageSum/measurementsSize) / 1024.0 * 1000.0;
 	if(averageVoltage > 700.0 || averageVoltage < 600.0)
 	{
@@ -78,6 +79,8 @@ void HardwareTest::voltageTest()
 	display->commit();
 	if(!measureOK)
 	{
+		Serial.println("END");
+		Serial.println("ERR");
 		while(1)
 		{
 			yield();

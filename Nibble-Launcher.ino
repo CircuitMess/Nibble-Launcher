@@ -47,15 +47,15 @@ void setup(){
 	{
 		i2c.pinMode(i, INPUT_PULLUP);
 	}
-	Serial.println();
 	uint16_t portRead = i2c.portRead();
-	Serial.println(portRead, BIN);
-	Serial.println(((portRead & 0b1111111) == 0) ? "all pressed" : "not all pressed");
-	Serial.printf("Calibrated: %d\n", settings()->calibrated);
+	// Serial.println();
+	// Serial.println(portRead, BIN);
+	// Serial.println(((portRead & 0b1111111) == 0) ? "all pressed" : "not all pressed");
+	// Serial.printf("Calibrated: %d\n", settings()->calibrated);
 	
-	if(((portRead & 0b1111111) == 0) && !settings()->calibrated)
+	// if(((portRead & 0b1111111) == 1) && !settings()->calibrated)
+	if(1)
 	{
-		Serial.println("TESTING");
 		HardwareTest test = HardwareTest(display);
 		test.start();
 	}
