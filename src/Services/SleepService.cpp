@@ -33,9 +33,12 @@ void SleepService::startLightSleep()
 void SleepService::wakeLightSleep()
 {
 	Serial.println("wakeLightSleep");
+	instance->display->getTft()->writecommand(17);
+
+	delay(40); // give the display some time to wake up from sleep
+
 	runningContext->start();
 	// digitalWrite(BL_PIN, 0);
-	instance->display->getTft()->writecommand(17);
 	
 	runningContext->draw();
 	instance->display->commit();
