@@ -38,6 +38,7 @@ void Menu::start(Context* currentContext){
 }
 
 void Menu::stop(){
+	Settings::store();
 	if(showProgress == 1){
 		showProgress = 0.99999f;
 		// UpdateManager::addListener(this);

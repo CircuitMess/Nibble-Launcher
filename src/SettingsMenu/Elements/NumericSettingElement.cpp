@@ -20,12 +20,17 @@ SettingsMenu::NumericSettingElement::NumericSettingElement(ElementContainer* par
 void SettingsMenu::NumericSettingElement::draw()
 {
 	getSprite()->setCursor(getTotalX() + 2, getTotalY() - 1);
-	getSprite()->setTextColor(TFT_BLACK);
+	getSprite()->setTextColor(TFT_WHITE);
+	if(active)
+	{
+		getSprite()->setTextColor(TFT_YELLOW);
+	}
 	getSprite()->setTextSize(1);
 	getSprite()->setTextFont(2);
 	getSprite()->setTextWrap(0);
 	getSprite()->print(setting->label.c_str());
 	getSprite()->print(": ");
+	getSprite()->setTextColor(TFT_WHITE);
 	getSprite()->print(parseSeconds(values[currentStep]).c_str());
 	if(blinkToggle)
 	{
@@ -35,8 +40,8 @@ void SettingsMenu::NumericSettingElement::draw()
 		getSprite()->print(parseSeconds(values[values.size() - 1]).c_str());
 	}
 
-	getSprite()->drawRect(getTotalX() + 28, getTotalY() + 19, getWidth() - 56, 7, TFT_BLACK);
-	getSprite()->fillRect(getTotalX() + 30, getTotalY() + 21, map(currentStep, 0, numSteps - 1, 0, getWidth() - 60), 3, TFT_BLACK);
+	getSprite()->drawRoundRect(getTotalX() + 28, getTotalY() + 19, getWidth() - 56, 7, 2, TFT_WHITE);
+	getSprite()->fillRect(getTotalX() + 30, getTotalY() + 21, map(currentStep, 0, numSteps - 1, 0, getWidth() - 60), 3, TFT_WHITE);
 	Element::draw();
 }
 std::string SettingsMenu::NumericSettingElement::parseSeconds(uint seconds)
