@@ -51,7 +51,7 @@ SettingsMenu::SettingsMenu::SettingsMenu(Display& display) :
 }
 void SettingsMenu::SettingsMenu::draw()
 {
-	canvas->clear(TFT_LIGHTGREY);
+	canvas->clear(TFT_DARKGREY);
 	screen.draw();
 }
 void SettingsMenu::SettingsMenu::update(uint _time)
@@ -68,6 +68,7 @@ void SettingsMenu::SettingsMenu::update(uint _time)
 }
 void SettingsMenu::SettingsMenu::start()
 {
+	runningContext = this;
 	Input::getInstance()->setBtnPressCallback(BTN_B, [](){
 		Settings::store();
 		Piezo.setMute(!settings()->audio);

@@ -11,6 +11,7 @@
 #include <Display/Sprite.h>
 #include <UI/LinearLayout.h>
 #include "Elements/SettingElement.h"
+
 namespace SettingsMenu
 {
 
