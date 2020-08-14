@@ -31,9 +31,9 @@ private:
 	Screen screen;
 	LinearLayout layout;
 	TextElement exit;
-	LinearLayout muteLayout;
+	LinearLayout audioLayout;
 	TextElement muteText;
-	Switch muteSwitch;
+	Switch audioSwitch;
 
 	float showProgress = 0;
 	bool shown = false;

@@ -6,12 +6,13 @@
 #include <Input/Input.h>
 #include <Update/UpdateManager.h>
 #include <Audio/Piezo.h>
+#include "SettingsMenu/SettingsStruct.hpp"
 
 Menu* Menu::instance = nullptr;
 
 Menu::Menu(Display& display) : canvas(display.getBaseSprite()), screen(display, 100, 100),
-	layout(&screen, VERTICAL), muteLayout(&layout, HORIZONTAL), exit(&layout, screen.getWidth() - 10, 20),
-	muteText(&muteLayout, screen.getWidth() - 60 - 10, 20), muteSwitch(&muteLayout){
+	layout(&screen, VERTICAL), audioLayout(&layout, HORIZONTAL), exit(&layout, screen.getWidth() - 10, 20),
+	muteText(&audioLayout, screen.getWidth() - 60 - 10, 20), audioSwitch(&audioLayout){
 
 	instance = this;
 	screen.setPos(128, 128);
@@ -28,7 +29,7 @@ void Menu::start(Context* currentContext){
 
 	shown = true;
 	selectElement(0);
-	muteSwitch.set(Piezo.isMuted(), true);
+	audioSwitch.set(settings()->audio, true);
 	if(showProgress == 0){
 		currentContext->stop();
 		showProgress = 0.00001f;
@@ -54,8 +55,9 @@ void Menu::bindInput(){
 	Input::getInstance()->setBtnPressCallback(BTN_A, [](){
 		if(instance == nullptr) return;
 		if(instance->selectedElement == 0){
-			instance->muteSwitch.toggle();
-			Piezo.setMute(instance->muteSwitch.getState());
+			instance->audioSwitch.toggle();
+			settings()->audio = instance->audioSwitch.getState();
+			Piezo.setMute(!settings()->audio);
 		}else{
 			instance->exiting = true;
 			instance->stop();
@@ -75,16 +77,18 @@ void Menu::bindInput(){
 	Input::getInstance()->setBtnPressCallback(BTN_RIGHT, [](){
 		if(instance == nullptr) return;
 		if(instance->selectedElement == 0){
-			instance->muteSwitch.set(true);
-			Piezo.setMute(true);
+			instance->audioSwitch.set(true);
+			settings()->audio = 1;
+			Piezo.setMute(!settings()->audio);
 		}
 	});
 
 	Input::getInstance()->setBtnPressCallback(BTN_LEFT, [](){
 		if(instance == nullptr) return;
 		if(instance->selectedElement == 0){
-			instance->muteSwitch.set(false);
-			Piezo.setMute(false);
+			instance->audioSwitch.set(false);
+			settings()->audio = 0;
+			Piezo.setMute(!settings()->audio);
 		}
 	});
 }
@@ -100,7 +104,7 @@ void Menu::releaseInput(){
 
 void Menu::selectElement(uint8_t index){
 	layout.reposChildren();
-	muteLayout.reposChildren();
+	audioLayout.reposChildren();
 	selectedElement = index;
 
 	exit.setColor(TFT_WHITE);
@@ -166,19 +170,19 @@ void Menu::buildUI(){
 	layout.setGutter(5);
 	layout.reflow();
 
-	muteLayout.setWHType(PARENT, CHILDREN);
-	muteLayout.addChild(&muteText);
-	muteLayout.addChild(&muteSwitch);
-	muteLayout.reflow();
+	audioLayout.setWHType(PARENT, CHILDREN);
+	audioLayout.addChild(&muteText);
+	audioLayout.addChild(&audioSwitch);
+	audioLayout.reflow();
 
-	layout.addChild(&muteLayout);
+	layout.addChild(&audioLayout);
 	layout.addChild(&exit);
 
 	layout.reflow();
 	screen.addChild(&layout);
 	screen.repos();
 
-	muteText.setText("Mute");
+	muteText.setText("Sound");
 	muteText.setFont(1);
 	muteText.setSize(1);
 	muteText.setColor(TFT_WHITE);
