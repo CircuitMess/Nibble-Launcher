@@ -92,7 +92,6 @@ void Launcher::bindInput(){
 		uint8_t index = instance->selectedGame;
 
 		Context* game = games[index].launch(*display);
-		runningContext = game;
 		game->push(instance);
 	});
 }
