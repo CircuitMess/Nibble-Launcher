@@ -6,21 +6,22 @@
 #include <Audio/Piezo.h>
 #include "../Services/SleepService.h"
 
-Vector<SettingsMenu::Setting> settingsVector = {};
+Vector<SettingsMenu::Setting> settingsVector = {
+	SettingsMenu::Setting(SettingsMenu::Setting::Type::NUMERIC, new SettingsMenu::NumericSettingParams(Vector<int>{0, 10, 30, 60, 300}), std::string("Sleep"), nullptr),
+	SettingsMenu::Setting(SettingsMenu::Setting::Type::NUMERIC, new SettingsMenu::NumericSettingParams(Vector<int>{0, 300, 600, 1800, 3600}), std::string("Shutdown"), nullptr),
+	SettingsMenu::Setting(SettingsMenu::Setting::Type::BOOLEAN, nullptr, std::string("Audio"), nullptr)
+};
 
 SettingsMenu::SettingsMenu* SettingsMenu::SettingsMenu::instance = nullptr;
-
 SettingsMenu::SettingsMenu::SettingsMenu(Display& display) :
 		Context(display), display(&display), canvas(display.getBaseSprite()),
 		layout(new LinearLayout(&screen, VERTICAL))
 {
 	instance = this;
 
-	settingsVector = {
-		Setting(Setting::Type::NUMERIC, new NumericSettingParams(Vector<int>{0, 10, 30, 60, 300}), std::string("Sleep"), &(settings()->sleepTime)),
-		Setting(Setting::Type::NUMERIC, new NumericSettingParams(Vector<int>{0, 300, 600, 1800, 3600}), std::string("Shutdown"), &(settings()->shutdownTime)),
-		Setting(Setting::Type::BOOLEAN, nullptr, std::string("Audio"), &(settings()->audio))
-	};
+	settingsVector[0].storeLocation = &(settings()->sleepTime);
+	settingsVector[1].storeLocation = &(settings()->shutdownTime);
+	settingsVector[2].storeLocation = &(settings()->audio);
 
 	layout->setWHType(PARENT, PARENT);
 	layout->setPadding(3);
@@ -106,7 +107,6 @@ void SettingsMenu::SettingsMenu::stop()
 }
 void SettingsMenu::SettingsMenu::pack()
 {
-	
 }
 void SettingsMenu::SettingsMenu::setElementCallbacks()
 {

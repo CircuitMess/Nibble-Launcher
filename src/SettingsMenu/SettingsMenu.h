@@ -18,7 +18,7 @@ class SettingsMenu: public Context, public UpdateListener
 {
 public:
 	SettingsMenu(Display& Display);
-
+	
 	void draw() override;
 	void start() override;
 	void update(uint _time) override;

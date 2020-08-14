@@ -40,6 +40,7 @@ Launcher::Launcher(Display* display, BatteryService* batteryService) : Context(*
 }
 
 void Launcher::start(){
+	Serial.println(ESP.getFreeHeap());
 	if(runningContext != nullptr && runningContext != this){
 		delete runningContext;
 	}
