@@ -9,14 +9,20 @@ struct Tone {
 	uint duration;
 };
 
+/*Vector<Tone> tones = {
+		Tone { 392, 100 },
+		Tone { 440, 100 },
+		Tone { 493, 100 },
+		Tone { 587, 200 }
+};*/
+
 Vector<Tone> tones = {
-		Tone { 587, 150 },
-		Tone { 698, 150 },
-		Tone { 523, 150 },
-		Tone { 782, 300 },
-		Tone { 523, 150 },
-		Tone { 587, 600 },
+		Tone { 466, 120 },
+		Tone { 523, 120 },
+		Tone { 587, 120 },
+		Tone { 659, 220 }
 };
+
 int tonePlaying = -1;
 uint toneTotal;
 
