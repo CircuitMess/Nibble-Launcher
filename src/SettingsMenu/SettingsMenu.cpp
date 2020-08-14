@@ -93,6 +93,9 @@ void SettingsMenu::SettingsMenu::start()
 			instance->setElementCallbacks();
 		}
 	});
+	Input::getInstance()->setBtnPressCallback(BTN_C, [](){
+		instance->pop();
+	});
 	setElementCallbacks();
 	UpdateManager::addListener(this);
 }
