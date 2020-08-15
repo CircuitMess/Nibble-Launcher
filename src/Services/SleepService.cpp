@@ -29,6 +29,10 @@ void SleepService::startLightSleep()
 	if(settings()->shutdownTime > 0){
 		instance->setInactivityCallback(settings()->shutdownTime*1000000, shutdown);
 	}
+	else
+	{
+		instance->setInactivityCallback(0, nullptr);
+	}
 }
 void SleepService::wakeLightSleep()
 {
