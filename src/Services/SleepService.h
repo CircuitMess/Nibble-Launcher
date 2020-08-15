@@ -14,6 +14,8 @@ public:
 	void start();
 	void update(uint _time);
 	static SleepService* getInstance();
+	void addOnSleepCallback(void(*callback)());
+	void addOnWakeupCallback(void(*callback)());
 private:
 	static void startLightSleep();
 	static void wakeLightSleep();
@@ -28,6 +30,10 @@ private:
 	uint inactivityTime = 0;
 	bool inactivityCheck = 1;
 	uint inactivityCallbackTime = 0;
+	bool sleepStatus = 0;
+
+	Vector<void(*)()> onSleepCallbacks;
+	Vector<void(*)()> onWakeupCallbacks;
 };
 
 #endif
