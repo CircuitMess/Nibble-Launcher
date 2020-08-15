@@ -11,7 +11,6 @@ SleepService::SleepService(Display& display) : display(&display)
 }
 void SleepService::start()
 {
-	Serial.println(settings()->sleepTime);
 	if(settings()->sleepTime > 0){
 		setInactivityCallback(settings()->sleepTime*1000000, startLightSleep);
 	}else{
@@ -48,7 +47,6 @@ void SleepService::startLightSleep()
 }
 void SleepService::wakeLightSleep()
 {
-	Serial.println("wakeLightSleep");
 	instance->sleepStatus = 0;
 	instance->display->getTft()->writecommand(17);
 
