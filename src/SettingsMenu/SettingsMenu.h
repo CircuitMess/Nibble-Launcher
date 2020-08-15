@@ -3,10 +3,10 @@
 
 #include <Arduino.h>
 #include <CircuitOS.h>
+#include <Nibble.h>
 #include <Input/Input.h>
 #include <Update/UpdateManager.h>
 #include <Support/Context.h>
-#include "../Nibble.hpp"
 #include <UI/Image.h>
 #include <Display/Sprite.h>
 #include <UI/LinearLayout.h>

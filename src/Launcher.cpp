@@ -1,5 +1,5 @@
 #include "Launcher.h"
-#include "Nibble.hpp"
+#include <Nibble.h>
 #include <Input/Input.h>
 
 #include "Splash.h"

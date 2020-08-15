@@ -1,7 +1,7 @@
 #include "SleepService.h"
 #include <Input/Input.h>
 #include <Input/I2cExpander.h>
-#include "../Nibble.hpp"
+#include <Nibble.h>
 #include "../SettingsMenu/SettingsStruct.hpp"
 SleepService* SleepService::instance = nullptr;
 

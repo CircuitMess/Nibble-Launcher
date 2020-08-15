@@ -1,6 +1,6 @@
 #include "Menu.h"
 
-#include "Nibble.hpp"
+#include <Nibble.h>
 #include <Display/Sprite.h>
 #include <Support/Context.h>
 #include <Input/Input.h>

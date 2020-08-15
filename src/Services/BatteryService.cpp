@@ -1,7 +1,7 @@
 #include "BatteryService.h"
 #include <Input/Input.h>
 #include <Input/I2cExpander.h>
-#include "../Nibble.hpp"
+#include <Nibble.h>
 
 BatteryService* BatteryService::instance = nullptr;
 
