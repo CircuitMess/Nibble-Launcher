@@ -134,7 +134,7 @@ void Launcher::draw(){
 	{
 		canvas->drawMonochromeIcon(battery2, 120, 0, 8, 12, 1, TFT_WHITE);
 	}
-	else if(batteryService->getVoltage() < 680)
+	else if(batteryService->getVoltage() < 700)
 	{
 		canvas->drawMonochromeIcon(battery3, 120, 0, 8, 12, 1, TFT_WHITE);
 	}
