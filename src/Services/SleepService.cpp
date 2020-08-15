@@ -11,7 +11,6 @@ SleepService::SleepService(Display& display) : display(&display)
 }
 void SleepService::start()
 {
-	Serial.println(settings()->sleepTime);
 	if(settings()->sleepTime > 0){
 		setInactivityCallback(settings()->sleepTime*1000000, startLightSleep);
 	}else{
@@ -38,32 +37,32 @@ void SleepService::startLightSleep()
 	I2cExpander::getInstance()->pinWrite(BL_PIN, 0);
 
 	Input::getInstance()->setAnyKeyCallback(wakeLightSleep, 1);
+
 	if(settings()->shutdownTime > 0){
-		instance->sleepStatus = 1;
 		instance->setInactivityCallback(settings()->shutdownTime*1000000, shutdown);
 	}
 	else
 	{
 		instance->setInactivityCallback(0, nullptr);
 	}
+	instance->sleepStatus = 1;
 }
 void SleepService::wakeLightSleep()
 {
-	Serial.println("wakeLightSleep");
 	instance->sleepStatus = 0;
 	// instance->display->getTft()->writecommand(17);
 
-	delay(100); // give the display some time to wake up from sleep
+	// delay(100); // give the display some time to wake up from sleep
 
 	// runningContext->start();
-	// digitalWrite(BL_PIN, 0);
-	
 	// runningContext->draw();
 	// instance->display->commit();
+
 	I2cExpander::getInstance()->pinWrite(BL_PIN, 1);
+
 	instance->setInactivityCallback(settings()->sleepTime*1000000, startLightSleep);
 	Input::getInstance()->setAnyKeyCallback([](){
-		instance->inactivityCheck = 0;
+		instance->inactivityCheck = false;
 	});
 
 	for(uint8_t i = 0; i < instance->onWakeupCallbacks.size(); i++)
