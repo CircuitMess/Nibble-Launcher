@@ -14,6 +14,8 @@ void SleepService::start()
 	Serial.println(settings()->sleepTime);
 	if(settings()->sleepTime > 0){
 		setInactivityCallback(settings()->sleepTime*1000000, startLightSleep);
+	}else{
+		setInactivityCallback(0, nullptr);
 	}
 	Input::getInstance()->setAnyKeyCallback([](){
 		instance->inactivityCheck = 0;
@@ -21,6 +23,11 @@ void SleepService::start()
 }
 void SleepService::startLightSleep()
 {
+	if(settings()->sleepTime == 0)
+	{
+		instance->setInactivityCallback(0, nullptr);
+		return;
+	}
 	runningContext->stop();
 	// digitalWrite(BL_PIN, 0);
 	instance->display->getTft()->writecommand(16);
