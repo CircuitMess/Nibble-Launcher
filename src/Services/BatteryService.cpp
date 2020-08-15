@@ -60,7 +60,7 @@ void BatteryService::update(uint _time)
 			showShutdown = 1;
 			shutdownTime = 0;
 		}
-		else if(averageVoltage < 680.0 && !warningShown) //< 650.0 shutdown
+		else if(averageVoltage < 680.0 && !warningShown)
 		{
 			if(runningContext != nullptr){
 				runningContext->stop();

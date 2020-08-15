@@ -52,7 +52,7 @@ void SleepService::shutdown()
 {
 	instance->display->getTft()->writecommand(16);
 	I2cExpander::getInstance()->pinWrite(BL_PIN, 0);
-	// I2cExpander::getInstance()->portConfig(0xFFFF);
+	I2cExpander::getInstance()->portConfig(0xFFFF);
 	ESP.deepSleep(0);
 }
 
