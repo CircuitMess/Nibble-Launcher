@@ -82,6 +82,7 @@ void SettingsMenu::SettingsMenu::start()
 			instance->cursor--;
 			instance->elements[instance->cursor]->setActive(1);
 			instance->setElementCallbacks();
+			Piezo.tone(150, 50);
 		}
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_DOWN, [](){
@@ -91,6 +92,7 @@ void SettingsMenu::SettingsMenu::start()
 			instance->cursor++;
 			instance->elements[instance->cursor]->setActive(1);
 			instance->setElementCallbacks();
+			Piezo.tone(150, 50);
 		}
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_C, [](){
@@ -116,11 +118,14 @@ void SettingsMenu::SettingsMenu::setElementCallbacks()
 {
 	Input::getInstance()->setBtnPressCallback(BTN_LEFT, [](){
 		instance->elements[instance->cursor]->pressLeft();
+		Piezo.tone(150, 50);
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_RIGHT, [](){
 		instance->elements[instance->cursor]->pressRight();
+		Piezo.tone(150, 50);
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_A, [](){
 		instance->elements[instance->cursor]->pressSelect();
+		Piezo.tone(150, 50);
 	});
 }

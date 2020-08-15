@@ -59,6 +59,7 @@ void Menu::bindInput(){
 			instance->audioSwitch.toggle();
 			settings()->audio = instance->audioSwitch.getState();
 			Piezo.setMute(!settings()->audio);
+			Piezo.tone(500, 50);
 		}else{
 			instance->exiting = true;
 			instance->stop();
@@ -68,19 +69,25 @@ void Menu::bindInput(){
 	Input::getInstance()->setBtnPressCallback(BTN_UP, [](){
 		if(instance == nullptr) return;
 		instance->selectElement(instance->selectedElement == 0 ? 1 : 0);
+		Piezo.tone(500, 50);
 	});
 
 	Input::getInstance()->setBtnPressCallback(BTN_DOWN, [](){
 		if(instance == nullptr) return;
 		instance->selectElement((instance->selectedElement + 1) % 2);
+		Piezo.tone(500, 50);
 	});
 
 	Input::getInstance()->setBtnPressCallback(BTN_RIGHT, [](){
 		if(instance == nullptr) return;
 		if(instance->selectedElement == 0){
-			instance->audioSwitch.set(true);
 			settings()->audio = 1;
 			Piezo.setMute(!settings()->audio);
+			if(instance->audioSwitch.getState() == false)
+			{
+				Piezo.tone(500, 50);
+			}
+			instance->audioSwitch.set(true);
 		}
 	});
 
@@ -90,6 +97,7 @@ void Menu::bindInput(){
 			instance->audioSwitch.set(false);
 			settings()->audio = 0;
 			Piezo.setMute(!settings()->audio);
+			Piezo.tone(500, 50);
 		}
 	});
 }

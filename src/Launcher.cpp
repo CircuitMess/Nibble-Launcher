@@ -13,7 +13,7 @@
 #include "SettingsMenu/GameInfo.hpp"
 #include "../GameInfo.hpp"
 #include "Services/BatteryService.h"
-
+#include <Audio/Piezo.h>
 #include "Menu.h"
 #include "Bitmaps/battery.hpp"
 
@@ -75,10 +75,12 @@ void Launcher::next(){
 void Launcher::bindInput(){
 	Input::getInstance()->setBtnPressCallback(BTN_RIGHT, [](){
 		instance->next();
+		Piezo.tone(800, 50);
 	});
 
 	Input::getInstance()->setBtnPressCallback(BTN_LEFT, [](){
 		instance->prev();
+		Piezo.tone(800, 50);
 	});
 
 	Input::getInstance()->setBtnPressCallback(BTN_A, [](){
@@ -94,6 +96,7 @@ void Launcher::bindInput(){
 	Input::getInstance()->setBtnPressCallback(BTN_C, [](){
 		if(runningContext == nullptr || runningContext == instance) return;
 		instance->menu->toggle(runningContext);
+		Piezo.tone(500, 50);
 	});
 }
 
