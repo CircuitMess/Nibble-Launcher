@@ -19,7 +19,7 @@ public:
 	void draw();
 
 	void start(Context* currentContext);
-	void stop();
+	void stop(bool immediate = false);
 	void toggle(Context* currentContext);
 
 private:
@@ -37,8 +37,10 @@ private:
 
 	float showProgress = 0;
 	bool shown = false;
+	bool shownDone = false;
 
 	bool exiting = false;
+	bool stopping = false;
 
 	float selectAccum = 0;
 	uint8_t selectedX;

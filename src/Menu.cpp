@@ -28,6 +28,8 @@ void Menu::start(Context* currentContext){
 	this->currentContext = currentContext;
 
 	shown = true;
+	shownDone = false;
+	stopping = false;
 	selectElement(0);
 	audioSwitch.set(settings()->audio, true);
 	if(showProgress == 0){
@@ -37,11 +39,25 @@ void Menu::start(Context* currentContext){
 	}
 }
 
-void Menu::stop(){
+void Menu::stop(bool immediate){
 	Settings::store();
+
+	if(immediate){
+		stopping = true;
+		UpdateManager::removeListener(this);
+
+		shown = false;
+		showProgress = 0;
+		exiting = false;
+		currentContext = nullptr;
+
+		releaseInput();
+		return;
+	}
+
+
 	if(showProgress == 1){
 		showProgress = 0.99999f;
-		// UpdateManager::addListener(this);
 	}
 
 	shown = false;
@@ -135,6 +151,8 @@ void Menu::draw(){
 }
 
 void Menu::update(uint micros){
+	if(stopping) return;
+
 	if(showProgress != 0 && showProgress != 1){
 		if(shown){
 			showProgress = min(1.0f, showProgress + (float) micros / 1000000.0f * 5.0f);
@@ -167,7 +185,8 @@ void Menu::update(uint micros){
 			}
 
 			currentContext = nullptr;
-		}else if(showProgress == 1){
+		}else if(showProgress == 1 && !shownDone){
+			shownDone = true;
 			bindInput();
 		}
 	}

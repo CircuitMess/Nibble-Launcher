@@ -16,6 +16,7 @@
 #include <Audio/Piezo.h>
 #include "Menu.h"
 #include "Bitmaps/battery.hpp"
+#include "Services/SleepService.h"
 
 
 const GameInfo games[] = {
@@ -33,6 +34,9 @@ Launcher::Launcher(Display* display, BatteryService* batteryService) : Context(*
 	splash = new Splash(display->getBaseSprite(), logo, title, scroller);
 	menu = new Menu(*display);
 
+	SleepService::getInstance()->addOnSleepCallback([](){
+		instance->menu->stop(true);
+	});
 }
 
 void Launcher::start(){
