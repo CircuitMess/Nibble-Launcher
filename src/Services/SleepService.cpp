@@ -16,6 +16,7 @@ void SleepService::start()
 	}else{
 		setInactivityCallback(0, nullptr);
 	}
+
 	Input::getInstance()->setAnyKeyCallback([](){
 		instance->inactivityCheck = 0;
 	});
@@ -27,14 +28,15 @@ void SleepService::startLightSleep()
 		instance->setInactivityCallback(0, nullptr);
 		return;
 	}
+
 	for(uint8_t i = 0; i < instance->onSleepCallbacks.size(); i++)
 	{
 		instance->onSleepCallbacks[i]();
 	}
+
 	runningContext->stop();
-	// digitalWrite(BL_PIN, 0);
-	instance->display->getTft()->writecommand(16);
 	I2cExpander::getInstance()->pinWrite(BL_PIN, 0);
+
 	Input::getInstance()->setAnyKeyCallback(wakeLightSleep, 1);
 	if(settings()->shutdownTime > 0){
 		instance->sleepStatus = 1;
@@ -48,16 +50,14 @@ void SleepService::startLightSleep()
 void SleepService::wakeLightSleep()
 {
 	instance->sleepStatus = 0;
-	instance->display->getTft()->writecommand(17);
+	I2cExpander::getInstance()->pinWrite(BL_PIN, 1);
 
-	delay(40); // give the display some time to wake up from sleep
+	delay(100); // give the display some time to wake up from sleep
 
-	runningContext->start();
-	// digitalWrite(BL_PIN, 0);
-	
 	runningContext->draw();
 	instance->display->commit();
-	I2cExpander::getInstance()->pinWrite(BL_PIN, 1);
+	runningContext->start();
+
 	instance->setInactivityCallback(settings()->sleepTime*1000000, startLightSleep);
 	Input::getInstance()->setAnyKeyCallback([](){
 		instance->inactivityCheck = 0;
@@ -70,6 +70,7 @@ void SleepService::wakeLightSleep()
 }
 void SleepService::shutdown()
 {
+
 	instance->display->getTft()->writecommand(16);
 	I2cExpander::getInstance()->pinWrite(BL_PIN, 0);
 	I2cExpander::getInstance()->portConfig(0xFFFF);
@@ -80,7 +81,7 @@ void SleepService::update(uint _time)
 {
 	if(sleepStatus)
 	{
-		delay(50);
+		delay(100);
 	}
 	if(inactivityCheck)
 	{
