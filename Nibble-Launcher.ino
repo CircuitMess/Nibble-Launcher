@@ -11,6 +11,8 @@
 #include "src/Services/SleepService.h"
 #include "src/SettingsMenu/SettingsStruct.hpp"
 
+#include <ESP8266WiFi.h>
+
 Launcher* launcher;
 Context* runningContext = nullptr;
 BatteryService* batteryService;
@@ -22,6 +24,9 @@ void setup(){
 	Serial.begin(115200);
 	Nibble.begin();
 	display = Nibble.getDisplay();
+
+	WiFi.mode(WIFI_OFF);
+	WiFi.forceSleepBegin();
 
 	Piezo.begin(BUZZ_PIN);
 
