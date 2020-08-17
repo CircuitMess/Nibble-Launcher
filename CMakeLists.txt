@@ -8,11 +8,13 @@ include_directories(~/.arduino15/packages/esp8266/hardware/esp8266/2.7.1/cores/e
 include_directories(~/Arduino/libraries/CircuitOS/src)
 include_directories(~/Arduino/libraries/TFT_eSPI)
 include_directories(~/Arduino/libraries/TFT_eSPI/Extensions)
+include_directories(~/Arduino/libraries/Nibble/src)
 
 AUX_SOURCE_DIRECTORY(src SOURCES)
-AUX_SOURCE_DIRECTORY(src/BatteryService SOURCES)
-AUX_SOURCE_DIRECTORY(src/SleepService SOURCES)
 AUX_SOURCE_DIRECTORY(src/Elements SOURCES)
+AUX_SOURCE_DIRECTORY(src/SettingsMenu SOURCES)
+AUX_SOURCE_DIRECTORY(src/SettingsMenu/Elements SOURCES)
+AUX_SOURCE_DIRECTORY(src/Services SOURCES)
 
 add_definitions(-DDEBUG)
 add_definitions(-DCIRCUITOS_LITTLEFS)
