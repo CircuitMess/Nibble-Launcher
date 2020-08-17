@@ -70,8 +70,16 @@ uint8_t GameScroller::next(){
 }
 
 void GameScroller::draw(){
-	for(const GameImage* game : games){
-		game->draw();
+	getCGame()->draw();
+	getRGame()->draw();
+	getLGame()->draw();
+
+	if(scrolling()){
+		if(direction == NEXT){
+			getRRGame()->draw();
+		}else{
+			getLLGame()->draw();
+		}
 	}
 }
 
