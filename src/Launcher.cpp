@@ -50,6 +50,7 @@ void Launcher::start(){
 		delete runningContext;
 	}
 
+	exitingGame = false;
 	runningContext = this;
 	if(splash == nullptr){
 		bindInput();
@@ -103,7 +104,7 @@ void Launcher::bindInput(){
 	});
 
 	Input::getInstance()->setBtnPressCallback(BTN_C, [](){
-		if(runningContext == nullptr || runningContext == instance || BatteryService::getInstance()->modalShown()) return;
+		if(exitingGame || runningContext == nullptr || runningContext == instance || BatteryService::getInstance()->modalShown()) return;
 
 		instance->menu->toggle(runningContext);
 		Piezo.tone(500, 50);
