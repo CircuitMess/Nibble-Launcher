@@ -14,6 +14,7 @@ class Menu;
 
 class BatteryService;
 extern Context* runningContext;
+extern bool exitingGame;
 
 class Launcher : public UpdateListener, public Context {
 public:

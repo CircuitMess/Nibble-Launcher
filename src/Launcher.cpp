@@ -18,6 +18,8 @@
 #include "Bitmaps/battery.hpp"
 #include "Services/SleepService.h"
 
+Context* runningContext = nullptr;
+bool exitingGame = false;
 
 const GameInfo games[] = {
 	InvaderzInfo, BonkInfo, SpaceRocksInfo, SettingsInfo, SnakeInfo

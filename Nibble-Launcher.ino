@@ -17,7 +17,6 @@
 #include <ESP8266WiFi.h>
 
 Launcher* launcher;
-Context* runningContext = nullptr;
 BatteryService* batteryService;
 SleepService* sleepService;
 
