@@ -149,7 +149,7 @@ GameImage* GameScroller::getRGame(){
 }
 
 GameImage* GameScroller::getLLGame(){
-	if(selectedGame <= 1) return games[games.size()-2];
+	if(selectedGame <= 1) return games[games.size() - 2 + selectedGame];
 	return games[selectedGame - 2];
 }
 
