@@ -39,6 +39,10 @@ Launcher::Launcher(Display* display, BatteryService* batteryService) : Context(*
 	SleepService::getInstance()->addOnSleepCallback([](){
 		instance->menu->stop(true);
 	});
+
+	BatteryService::getInstance()->setModalCallback([](){
+		instance->menu->stop(true);
+	});
 }
 
 void Launcher::start(){
@@ -99,7 +103,8 @@ void Launcher::bindInput(){
 	});
 
 	Input::getInstance()->setBtnPressCallback(BTN_C, [](){
-		if(runningContext == nullptr || runningContext == instance) return;
+		if(runningContext == nullptr || runningContext == instance || BatteryService::getInstance()->modalShown()) return;
+
 		instance->menu->toggle(runningContext);
 		Piezo.tone(500, 50);
 	});

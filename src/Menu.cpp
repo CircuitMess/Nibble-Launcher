@@ -7,6 +7,7 @@
 #include <Update/UpdateManager.h>
 #include <Audio/Piezo.h>
 #include "SettingsMenu/SettingsStruct.hpp"
+#include "Services/BatteryService.h"
 
 Menu* Menu::instance = nullptr;
 
@@ -170,7 +171,9 @@ void Menu::update(uint micros){
 		selectedText->setX(newX);
 	}
 
-	draw();
+	if(!BatteryService::getInstance()->modalShown()){
+		draw();
+	}
 
 	if(showProgress == 0 || showProgress == 1){
 		if(showProgress == 0){
