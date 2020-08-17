@@ -26,17 +26,17 @@ void SettingsMenu::BoolSettingElement::draw()
 	getSprite()->print(setting->label.c_str());
 	getSprite()->print(":");
 	getSprite()->setTextColor(TFT_WHITE);
-	getSprite()->setCursor(getTotalX() + 31, getTotalY() + 14);
+	getSprite()->setCursor(getTotalX() + 31, getTotalY() + 16);
 	getSprite()->print("ON");
-	getSprite()->setCursor(getTotalX() + 74, getTotalY() + 14);
+	getSprite()->setCursor(getTotalX() + 74, getTotalY() + 16);
 	getSprite()->print("OFF");
 	if(state && (!active || (active && blinkToggle)))
 	{
-		getSprite()->drawRoundRect(getTotalX() + 22, getTotalY() + 14, 34, 16, 2, TFT_WHITE);
+		getSprite()->drawRoundRect(getTotalX() + 22, getTotalY() + 16, 34, 16, 2, TFT_WHITE);
 	}
 	else if(!state && (!active || (active && blinkToggle)))
 	{
-		getSprite()->drawRoundRect(getTotalX() + 66, getTotalY() + 14, 40, 16, 2, TFT_WHITE);
+		getSprite()->drawRoundRect(getTotalX() + 66, getTotalY() + 16, 40, 16, 2, TFT_WHITE);
 	}
 	Element::draw();
 }
