@@ -1,4 +1,5 @@
 #include "BatteryService.h"
+#include "SleepService.h"
 #include <Input/Input.h>
 #include <Input/I2cExpander.h>
 #include <Nibble.h>
@@ -20,6 +21,21 @@ BatteryService::BatteryService(Display& display) : display(&display), canvas(dis
 		voltageSum = (averageVoltage*1024.0/1000.0) * measurementCounter;
 	}
 }
+
+void BatteryService::draw(){
+	if(!showShutdown && !showWarning) return;
+
+	if(runningContext != nullptr){
+		runningContext->stop();
+	}
+
+	if(showShutdown){
+		drawShutdown();
+	}else if(showWarning){
+		drawWarning();
+	}
+}
+
 void BatteryService::update(uint _time)
 {
 	if(showShutdown)
@@ -33,19 +49,30 @@ void BatteryService::update(uint _time)
 			I2cExpander::getInstance()->portConfig(0xFFFF);
 			ESP.deepSleep(0);
 		}
+
+		if(!SleepService::getInstance()->isSleeping()){
+			if(runningContext != nullptr){
+				runningContext->draw();
+			}
+			draw();
+			display->commit();
+		}
+	}else if(showWarning && !SleepService::getInstance()->isSleeping()){
 		if(runningContext != nullptr){
 			runningContext->draw();
 		}
-		drawShutdown();
+		draw();
 		display->commit();
 	}
-	else if(showWarning){
+
+	if(showWarning && !SleepService::getInstance()->isSleeping()){
 		if(runningContext != nullptr){
-			runningContext->draw();
+			runningContext->stop();
 		}
-		drawWarning();
-		display->commit();
+
+		bindInput();
 	}
+
 	if (measurementCounter > measurementsSize)
 	{
 		averageVoltage = (voltageSum/measurementsSize) / 1024.0 * 1000.0;
@@ -59,6 +86,10 @@ void BatteryService::update(uint _time)
 			}
 			showShutdown = 1;
 			shutdownTime = 0;
+
+			if(modalCallback){
+				modalCallback();
+			}
 		}
 		else if(averageVoltage < 680.0 && !warningShown)
 		{
@@ -67,28 +98,34 @@ void BatteryService::update(uint _time)
 			}
 			showWarning = 1;
 			warningShown = 1;
-			Input::getInstance()->setBtnPressCallback(BTN_A, [](){
-				instance->showWarning = 0;
-				Input::getInstance()->removeBtnPressCallback(BTN_A);
-				Input::getInstance()->removeBtnPressCallback(BTN_B);
 
-				if(runningContext != nullptr){
-					runningContext->start();
-				}
-			});
-			Input::getInstance()->setBtnPressCallback(BTN_B, [](){
-				instance->showWarning = 0;
-				Input::getInstance()->removeBtnPressCallback(BTN_A);
-				Input::getInstance()->removeBtnPressCallback(BTN_B);
+			if(modalCallback){
+				modalCallback();
+			}
 
-				if(runningContext != nullptr){
-					runningContext->start();
-				}
-			});
+			bindInput();
 		}
 	}
 	measurementCounter++;
 	voltageSum+=analogRead(A0);
+}
+void BatteryService::bindInput(){
+	auto warningLambda = [](){
+		instance->showWarning = 0;
+		Input::getInstance()->removeBtnPressCallback(BTN_A);
+		Input::getInstance()->removeBtnPressCallback(BTN_B);
+
+		if(runningContext != nullptr){
+			runningContext->start();
+		}
+
+		if(instance->modalDismissCallback){
+			instance->modalDismissCallback();
+		}
+	};
+
+	Input::getInstance()->setBtnPressCallback(BTN_A, warningLambda);
+	Input::getInstance()->setBtnPressCallback(BTN_B, warningLambda);
 }
 void BatteryService::drawWarning()
 {
@@ -112,6 +149,9 @@ void BatteryService::drawWarning()
 	canvas->printCenter("Please replace");
 	canvas->setCursor(xOffset + 20, yOffset + 51);
 	canvas->printCenter("batteries.");
+	canvas->setCursor(xOffset + 20, yOffset + 69);
+	canvas->printCenter("A/B: dismiss");
+
 }
 void BatteryService::drawShutdown()
 {
@@ -137,4 +177,20 @@ void BatteryService::drawShutdown()
 uint BatteryService::getVoltage()
 {
 	return roundl(averageVoltage);
+}
+
+bool BatteryService::modalShown(){
+	return showWarning || showShutdown;
+}
+
+BatteryService* BatteryService::getInstance(){
+	return instance;
+}
+
+void BatteryService::setModalCallback(void (* modalCallback)()){
+	BatteryService::modalCallback = modalCallback;
+}
+
+void BatteryService::setModalDismissCallback(void (* modalDismissCallback)()){
+	BatteryService::modalDismissCallback = modalDismissCallback;
 }

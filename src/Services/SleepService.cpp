@@ -2,7 +2,10 @@
 #include <Input/Input.h>
 #include <Input/I2cExpander.h>
 #include <Nibble.h>
+#include <Update/UpdateManager.h>
 #include "../SettingsMenu/SettingsStruct.hpp"
+#include "BatteryService.h"
+
 SleepService* SleepService::instance = nullptr;
 
 SleepService::SleepService(Display& display) : display(&display)
@@ -35,11 +38,17 @@ void SleepService::startLightSleep()
 	}
 
 	runningContext->stop();
+	UpdateManager::removeListener(instance);
+	UpdateManager::update();
+	UpdateManager::addListener(instance);
+
+	instance->display->getBaseSprite()->clear(TFT_BLACK);
+	instance->display->commit();
 	I2cExpander::getInstance()->pinWrite(BL_PIN, 0);
 
 	Input::getInstance()->setAnyKeyCallback(wakeLightSleep, 1);
+	instance->sleepStatus = 1;
 	if(settings()->shutdownTime > 0){
-		instance->sleepStatus = 1;
 		instance->setInactivityCallback(settings()->shutdownTime*1000000, shutdown);
 	}
 	else
@@ -55,8 +64,13 @@ void SleepService::wakeLightSleep()
 	delay(100); // give the display some time to wake up from sleep
 
 	runningContext->draw();
-	instance->display->commit();
-	runningContext->start();
+	if(BatteryService::getInstance()->modalShown()){
+		BatteryService::getInstance()->draw();
+		instance->display->commit();
+	}else{
+		instance->display->commit();
+		runningContext->start();
+	}
 
 	instance->setInactivityCallback(settings()->sleepTime*1000000, startLightSleep);
 	Input::getInstance()->setAnyKeyCallback([](){
@@ -113,4 +127,8 @@ void SleepService::addOnSleepCallback(void(*callback)())
 void SleepService::addOnWakeupCallback(void(*callback)())
 {
 	onWakeupCallbacks.push_back(callback);
+}
+
+bool SleepService::isSleeping(){
+	return sleepStatus;
 }

@@ -16,6 +16,8 @@ public:
 	static SleepService* getInstance();
 	void addOnSleepCallback(void(*callback)());
 	void addOnWakeupCallback(void(*callback)());
+	bool isSleeping();
+
 private:
 	static void startLightSleep();
 	static void wakeLightSleep();

@@ -13,6 +13,12 @@ public:
 	BatteryService(Display& display);
 	void update(uint _time) override;
 	uint getVoltage();
+	bool modalShown();
+	static BatteryService* getInstance();
+	void draw();
+	void setModalCallback(void (* modalCallback)());
+	void setModalDismissCallback(void (* modalDismissCallback)());
+
 private:
 	Display* display;
 	Sprite *canvas;
@@ -21,10 +27,11 @@ private:
 	const uint measurementsSize = 100;
 	uint measurementCounter;
 
+	void bindInput();
 	void drawWarning();
 	bool showWarning = 0;
 	const uint8_t warningWidth = 120;
-	const uint8_t warningHeight = 70;
+	const uint8_t warningHeight = 90;
 	bool warningShown = 0;
 
 	void drawShutdown();
@@ -32,6 +39,9 @@ private:
 	uint shutdownTime = 0;
 
 	static BatteryService* instance;
+
+	void(*modalCallback)() = nullptr;
+	void(*modalDismissCallback)() = nullptr;
 
 };
 
