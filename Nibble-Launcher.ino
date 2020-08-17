@@ -12,6 +12,7 @@
 #include "src/Services/SleepService.h"
 #include "src/SettingsMenu/SettingsStruct.hpp"
 #include "src/HardwareTest.h"
+#include "src/SerialID.h"
 
 #include <ESP8266WiFi.h>
 
@@ -26,6 +27,7 @@ Display* display;
 
 void setup(){
 	Serial.begin(115200);
+	Serial.println();
 	Nibble.begin();
 	display = Nibble.getDisplay();
 
@@ -43,6 +45,7 @@ void setup(){
 	}
 
 #ifdef DEBUG_FLAG
+	UpdateManager::addListener(new SerialID);
 
 	for(uint8_t i = 0; i < 7; i++)
 	{
