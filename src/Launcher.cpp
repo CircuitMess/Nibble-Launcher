@@ -22,7 +22,7 @@ Context* runningContext = nullptr;
 bool exitingGame = false;
 
 const GameInfo games[] = {
-	InvaderzInfo, BonkInfo, SpaceRocksInfo, SettingsInfo, SnakeInfo
+	InvaderzInfo, BonkInfo, SpaceRocksInfo, SnakeInfo, SettingsInfo
 };
 
 Launcher* instance = nullptr;
