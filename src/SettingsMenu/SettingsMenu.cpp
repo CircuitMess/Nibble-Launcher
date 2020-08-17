@@ -109,7 +109,6 @@ void SettingsMenu::SettingsMenu::stop()
 	Input::getInstance()->removeBtnPressCallback(BTN_DOWN);
 	Input::getInstance()->removeBtnPressCallback(BTN_LEFT);
 	Input::getInstance()->removeBtnPressCallback(BTN_RIGHT);
-	Input::getInstance()->removeBtnPressCallback(BTN_A);
 }
 void SettingsMenu::SettingsMenu::pack()
 {
@@ -122,10 +121,6 @@ void SettingsMenu::SettingsMenu::setElementCallbacks()
 	});
 	Input::getInstance()->setBtnPressCallback(BTN_RIGHT, [](){
 		instance->elements[instance->cursor]->pressRight();
-		Piezo.tone(150, 50);
-	});
-	Input::getInstance()->setBtnPressCallback(BTN_A, [](){
-		instance->elements[instance->cursor]->pressSelect();
 		Piezo.tone(150, 50);
 	});
 }
