@@ -14,11 +14,11 @@ build: $(DIR)/build/$(NAME).bin
 $(DIR)/build/$(NAME).bin: $(srcFiles) $(headerFiles) $(DIR)/$(NAME).ino
 	@mkdir -p $(DIR)/build
 	cd $(DIR); \
-	$(ACLI) compile --fqbn esp8266:esp8266:nodemcu -o build/$(NAME).bin $(NAME).ino
+	$(ACLI) compile --fqbn cm:esp8266:nibble -o build/$(NAME).bin $(NAME).ino
 
 upload: | $(DIR)/build/$(NAME).bin
 	@cd $(DIR); \
-	$(ACLI) upload --fqbn esp8266:esp8266:nodemcu -p $(PORT) -i build/$(NAME).bin
+	$(ACLI) upload --fqbn cm:esp8266:nibble -p $(PORT) -i build/$(NAME).bin
 
 clean:
 	cd $(DIR); \
