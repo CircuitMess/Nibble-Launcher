@@ -22,8 +22,6 @@ SleepService* sleepService;
 
 Display* display;
 
-#define DEBUG_FLAG
-
 void setup(){
 	Serial.begin(115200);
 	Serial.println();
