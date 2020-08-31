@@ -1,4 +1,6 @@
 #include "GameImage.h"
+#include <Display/Sprite.h>
+#include <Display/Color.h>
 
 GameImage::GameImage(Sprite* canvas, const uint16_t* icon) : canvas(canvas), icon(icon){
 

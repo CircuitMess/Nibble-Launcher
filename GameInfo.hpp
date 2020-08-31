@@ -1,5 +1,7 @@
 #ifndef GAME_INFO
 #define GAME_INFO
+#include <CircuitOS.h>
+#include <Display/Display.h>
 class Context;
 struct GameInfo {
 	const char* title;
