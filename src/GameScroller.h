@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 #include <CircuitOS.h>
-#include <Update/UpdateListener.h>
+#include <Loop/LoopListener.h>
 #include <Util/Vector.h>
 #include "../GameInfo.hpp"
 
@@ -11,12 +11,12 @@ class Sprite;
 class Launcher;
 class GameImage;
 
-class GameScroller : public UpdateListener {
+class GameScroller : public LoopListener {
 public:
 	GameScroller(Sprite* canvas, const GameInfo gameDefs[], uint8_t gameCount);
 
 	void draw();
-	void update(uint micros) override;
+	void loop(uint micros);
 
 	uint8_t prev();
 	uint8_t next();

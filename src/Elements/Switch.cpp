@@ -1,4 +1,4 @@
-#include <Update/UpdateManager.h>
+#include <Loop/LoopManager.h>
 #include "Switch.h"
 
 Switch::Switch(ElementContainer* parent) : CustomElement(parent, 60, 20){
@@ -42,7 +42,7 @@ void Switch::draw(){
 	Element::draw();
 }
 
-void Switch::update(uint micros){
+void Switch::loop(uint micros){
 	if(state){
 		toggleProgress = min(1.0f, toggleProgress + (float) micros / 1000000.0f);
 	}else{
@@ -53,7 +53,7 @@ void Switch::update(uint micros){
 
 	if((state && toggleProgress >= .55f) || (!state && toggleProgress <= .45f)){
 		toggleProgress = lround(toggleProgress);
-		UpdateManager::removeListener(this);
+		LoopManager::removeListener(this);
 		toggling = false;
 		toggleAccum = 0;
 	}
@@ -69,7 +69,7 @@ void Switch::toggle(){
 		toggleProgress = state ? 0.05f : 1.0f - 0.05f;
 	}else{
 		toggling = true;
-		UpdateManager::addListener(this);
+		LoopManager::addListener(this);
 	}
 }
 
@@ -80,7 +80,7 @@ void Switch::set(bool state, bool instant){
 
 	if(instant){
 		if(toggling){
-			UpdateManager::removeListener(this);
+			LoopManager::removeListener(this);
 			toggling = false;
 		}
 
@@ -89,7 +89,7 @@ void Switch::set(bool state, bool instant){
 		toggleProgress = state ? 0.05f : 1.0f - 0.05f;
 	}else if(!toggling){
 		toggling = true;
-		UpdateManager::addListener(this);
+		LoopManager::addListener(this);
 	}
 }
 

@@ -30,7 +30,7 @@ Splash::Splash(Sprite* canvas, Logo* logo, GameTitle* title, GameScroller* scrol
 
 }
 
-void Splash::update(uint micros){
+void Splash::loop(uint micros){
 	if(f == 0){
 		f += 0.001;
 		return;

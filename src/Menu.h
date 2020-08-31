@@ -5,17 +5,17 @@
 #include <UI/Screen.h>
 #include <UI/LinearLayout.h>
 #include <UI/TextElement.h>
-#include <Update/UpdateListener.h>
+#include <Loop/LoopListener.h>
 #include "Elements/Switch.h"
 
 class Sprite;
 class Context;
 
-class Menu : public UpdateListener {
+class Menu : public LoopListener {
 public:
 	Menu(Display& display);
 
-	void update(uint micros) override;
+	void loop(uint micros) override;
 	void draw();
 
 	void start(Context* currentContext);

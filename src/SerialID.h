@@ -3,11 +3,11 @@
 
 #include <Arduino.h>
 #include <CircuitOS.h>
-#include <Update/UpdateListener.h>
+#include <Loop/LoopListener.h>
 
-class SerialID : public UpdateListener {
+class SerialID : public LoopListener {
 public:
-	void update(uint micros) override;
+	void loop(uint micros) override;
 
 private:
 	char last = 0;

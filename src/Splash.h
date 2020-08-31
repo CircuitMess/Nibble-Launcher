@@ -12,7 +12,7 @@ class Splash {
 public:
 	Splash(Sprite* canvas, Logo* logo, GameTitle* title, GameScroller* scroller);
 
-	void update(uint micros);
+	void loop(uint micros);
 	bool done();
 
 private:

@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 #include <CircuitOS.h>
-#include <Update/UpdateListener.h>
+#include <Loop/LoopListener.h>
 
 class Sprite;
 
@@ -11,7 +11,7 @@ class Logo {
 public:
 	Logo(Sprite* canvas);
 
-	void update(uint micros);
+	void loop(uint micros);
 	void splash(float f);
 	void draw();
 

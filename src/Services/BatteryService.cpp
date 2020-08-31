@@ -36,7 +36,7 @@ void BatteryService::draw(){
 	}
 }
 
-void BatteryService::update(uint _time)
+void BatteryService::loop(uint _time)
 {
 	if(showShutdown)
 	{

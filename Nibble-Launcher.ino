@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <CircuitOS.h>
 #include <Nibble.h>
-#include <Update/UpdateManager.h>
+#include <Loop/LoopManager.h>
 #include <Support/Context.h>
 #include <Input/Input.h>
 #include <Input/I2cExpander.h>
@@ -44,7 +44,7 @@ void setup(){
 	}
 
 #ifdef DEBUG_FLAG
-	UpdateManager::addListener(new SerialID);
+	LoopManager::addListener(new SerialID);
 
 	for(uint8_t i = 0; i < 7; i++)
 	{
@@ -65,8 +65,8 @@ void setup(){
 	batteryService = new BatteryService(*display);
 	sleepService = new SleepService(*display);
 
-	UpdateManager::addListener(batteryService);
-	UpdateManager::addListener(Input::getInstance());
+	LoopManager::addListener(batteryService);
+	LoopManager::addListener(Input::getInstance());
 
 	launcher = new Launcher(display, batteryService);
 	runningContext = launcher;
@@ -74,9 +74,9 @@ void setup(){
 	launcher->unpack();
 	launcher->start();
 	sleepService->start();
-	UpdateManager::addListener(sleepService);
+	LoopManager::addListener(sleepService);
 }
 
 void loop(){
-	UpdateManager::update();
+	LoopManager::loop();
 }

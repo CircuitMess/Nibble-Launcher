@@ -2,14 +2,14 @@
 #define ELEMENTS_SWITCH_H
 
 #include <UI/CustomElement.h>
-#include <Update/UpdateListener.h>
+#include <Loop/LoopListener.h>
 
-class Switch : public CustomElement, public UpdateListener {
+class Switch : public CustomElement, public LoopListener {
 public:
 	Switch(ElementContainer* parent);
 
 	void draw() override;
-	void update(uint micros);
+	void loop(uint micros) override;
 
 	void toggle();
 	void set(bool state, bool instant = false);

@@ -55,12 +55,12 @@ void Launcher::start(){
 	if(splash == nullptr){
 		bindInput();
 	}
-	UpdateManager::addListener(this);
+	LoopManager::addListener(this);
 }
 
 void Launcher::stop()
 {
-	UpdateManager::removeListener(this);
+	LoopManager::removeListener(this);
 	Input::getInstance()->removeBtnPressCallback(BTN_RIGHT);
 	Input::getInstance()->removeBtnPressCallback(BTN_LEFT);
 	Input::getInstance()->removeBtnPressCallback(BTN_A);
@@ -111,9 +111,9 @@ void Launcher::bindInput(){
 	});
 }
 
-void Launcher::update(uint micros){
+void Launcher::loop(uint micros){
 	if(splash){
-		splash->update(micros);
+		splash->loop(micros);
 
 		if(splash->done()){
 			delete splash;
@@ -124,7 +124,7 @@ void Launcher::update(uint micros){
 			title->change(games[selectedGame].title);
 		}
 	}else{
-		logo->update(micros);
+		logo->loop(micros);
 	}
 
 	draw();

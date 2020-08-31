@@ -1,7 +1,7 @@
 #include "SerialID.h"
 #include "SettingsMenu/SettingsStruct.hpp"
 
-void SerialID::update(uint micros){
+void SerialID::loop(uint micros){
 	if(Serial.available()){
 		char now = 0;
 		Serial.read(&now, 1);

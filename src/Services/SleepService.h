@@ -1,18 +1,18 @@
 #ifndef SLEEPSERVICE_NIBBLE_H
 #define SLEEPSERVICE_NIBBLE_H
 
-#include <Update/UpdateListener.h>
+#include <Loop/LoopListener.h>
 #include <Support/Context.h>
 #include <Display/Display.h>
 #include <UI/Image.h>
 
 extern Context* runningContext;
-class SleepService : public UpdateListener
+class SleepService : public LoopListener
 {
 public:
 	SleepService(Display& display);
 	void start();
-	void update(uint _time);
+	void loop(uint _time) override;
 	static SleepService* getInstance();
 	void addOnSleepCallback(void(*callback)());
 	void addOnWakeupCallback(void(*callback)());

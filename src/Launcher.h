@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 #include <CircuitOS.h>
-#include <Update/UpdateListener.h>
+#include <Loop/LoopListener.h>
 #include <Support/Context.h>
 
 class Logo;
@@ -16,11 +16,11 @@ class BatteryService;
 extern Context* runningContext;
 extern bool exitingGame;
 
-class Launcher : public UpdateListener, public Context {
+class Launcher : public LoopListener, public Context {
 public:
 	Launcher(Display* display, BatteryService* batteryService);
 
-	void update(uint micros) override;
+	void loop(uint micros) override;
 	void start() override;
 	void stop() override;
 	void draw() override;

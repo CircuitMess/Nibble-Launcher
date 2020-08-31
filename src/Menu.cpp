@@ -4,7 +4,7 @@
 #include <Display/Sprite.h>
 #include <Support/Context.h>
 #include <Input/Input.h>
-#include <Update/UpdateManager.h>
+#include <Loop/LoopManager.h>
 #include <Audio/Piezo.h>
 #include "SettingsMenu/SettingsStruct.hpp"
 #include "Services/BatteryService.h"
@@ -36,7 +36,7 @@ void Menu::start(Context* currentContext){
 	if(showProgress == 0){
 		currentContext->stop();
 		showProgress = 0.00001f;
-		UpdateManager::addListener(this);
+		LoopManager::addListener(this);
 	}
 }
 
@@ -45,7 +45,7 @@ void Menu::stop(bool immediate){
 
 	if(immediate){
 		stopping = true;
-		UpdateManager::removeListener(this);
+		LoopManager::removeListener(this);
 
 		shown = false;
 		showProgress = 0;
@@ -151,7 +151,7 @@ void Menu::draw(){
 	screen.commit();
 }
 
-void Menu::update(uint micros){
+void Menu::loop(uint micros){
 	if(stopping) return;
 
 	if(showProgress != 0 && showProgress != 1){
@@ -178,7 +178,7 @@ void Menu::update(uint micros){
 	if(showProgress == 0 || showProgress == 1){
 		if(showProgress == 0){
 			releaseInput();
-			UpdateManager::removeListener(this);
+			LoopManager::removeListener(this);
 
 			if(exiting){
 				currentContext->pop();

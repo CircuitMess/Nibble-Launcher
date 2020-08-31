@@ -2,7 +2,7 @@
 #include <Input/Input.h>
 #include <Input/I2cExpander.h>
 #include <Nibble.h>
-#include <Update/UpdateManager.h>
+#include <Loop/LoopManager.h>
 #include "../SettingsMenu/SettingsStruct.hpp"
 #include "BatteryService.h"
 
@@ -38,9 +38,9 @@ void SleepService::startLightSleep()
 	}
 
 	runningContext->stop();
-	UpdateManager::removeListener(instance);
-	UpdateManager::update();
-	UpdateManager::addListener(instance);
+	LoopManager::removeListener(instance);
+	LoopManager::loop();
+	LoopManager::addListener(instance);
 
 	instance->display->getBaseSprite()->clear(TFT_BLACK);
 	instance->display->commit();
@@ -91,7 +91,7 @@ void SleepService::shutdown()
 	ESP.deepSleep(0);
 }
 
-void SleepService::update(uint _time)
+void SleepService::loop(uint _time)
 {
 	if(sleepStatus)
 	{

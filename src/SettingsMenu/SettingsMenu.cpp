@@ -54,7 +54,7 @@ void SettingsMenu::SettingsMenu::draw()
 	canvas->clear(TFT_DARKGREY);
 	screen.draw();
 }
-void SettingsMenu::SettingsMenu::update(uint _time)
+void SettingsMenu::SettingsMenu::loop(uint _time)
 {
 	for (uint8_t i = 0; i < elements.size(); i++)
 	{
@@ -99,11 +99,11 @@ void SettingsMenu::SettingsMenu::start()
 		instance->pop();
 	});
 	setElementCallbacks();
-	UpdateManager::addListener(this);
+	LoopManager::addListener(this);
 }
 void SettingsMenu::SettingsMenu::stop()
 {
-	UpdateManager::removeListener(this);
+	LoopManager::removeListener(this);
 	Input::getInstance()->removeBtnPressCallback(BTN_B);
 	Input::getInstance()->removeBtnPressCallback(BTN_UP);
 	Input::getInstance()->removeBtnPressCallback(BTN_DOWN);

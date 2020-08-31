@@ -3,17 +3,17 @@
 
 #include <Arduino.h>
 #include <CircuitOS.h>
-#include <Update/UpdateListener.h>
+#include <Loop/LoopListener.h>
 
 class Sprite;
 
-class GameTitle : public UpdateListener {
+class GameTitle : public LoopListener {
 public:
 	GameTitle(Sprite* canvas);
 
 	void change(const char* newText);
 
-	void update(uint micros) override;
+	void loop(uint micros) override;
 	void draw();
 
 private:

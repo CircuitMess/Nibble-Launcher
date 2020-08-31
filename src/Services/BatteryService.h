@@ -1,17 +1,17 @@
 #ifndef BATTERYSERVICE_NIBBLE_H
 #define BATTERYSERVICE_NIBBLE_H
 
-#include <Update/UpdateListener.h>
+#include <Loop/LoopListener.h>
 #include <Support/Context.h>
 #include <Display/Display.h>
 #include <UI/Image.h>
 extern Context* runningContext;
 
-class BatteryService : public UpdateListener
+class BatteryService : public LoopListener
 {
 public:
 	BatteryService(Display& display);
-	void update(uint _time) override;
+	void loop(uint _time) override;
 	uint getVoltage();
 	bool modalShown();
 	static BatteryService* getInstance();

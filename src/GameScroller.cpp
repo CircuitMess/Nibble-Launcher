@@ -1,7 +1,7 @@
 #include "GameScroller.h"
 
 #include <Display/Sprite.h>
-#include <Update/UpdateManager.h>
+#include <Loop/LoopManager.h>
 
 #include "Elements/GameImage.h"
 
@@ -40,7 +40,7 @@ uint8_t GameScroller::prev(){
 		delta = 1;
 		multiplier = 1;
 		getLLGame()->setX(origin - 2 * width - 2 * gutter);
-		UpdateManager::addListener(this);
+		LoopManager::addListener(this);
 	}
 
 	return (selectedGame < 1) ? games.size() - 1 : selectedGame - 1;
@@ -63,7 +63,7 @@ uint8_t GameScroller::next(){
 		delta = 1;
 		multiplier = 1;
 		getRRGame()->setX(origin + 2 * width + 2 * gutter);
-		UpdateManager::addListener(this);
+		LoopManager::addListener(this);
 	}
 
 	return (selectedGame + 1) % games.size();
@@ -83,7 +83,7 @@ void GameScroller::draw(){
 	}
 }
 
-void GameScroller::update(uint micros){
+void GameScroller::loop(uint micros){
 	delta += speed * (micros / 1000000.0f) * (float) multiplier;
 
 	if(direction == PREV){
@@ -111,7 +111,7 @@ void GameScroller::update(uint micros){
 			return;
 		}
 
-		UpdateManager::removeListener(this);
+		LoopManager::removeListener(this);
 		delta = 0;
 		repos();
 	}
