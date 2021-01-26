@@ -78,8 +78,8 @@ bool HardwareTest::voltageTest()
 	//averageVoltage = map((uint) averageVoltage, 0, 1000, 0, 5444);
 	averageVoltage = (averageVoltage / 1000.0) * 5444.0;
 
-	// avgReading < 700.0 && avgReading > 600.0;
-	bool measureOK = averageVoltage < 3810.8 && averageVoltage > 3266.4;
+	// avgReading < 722 && avgReading > 600.0;
+	bool measureOK = averageVoltage < 3930.6 && averageVoltage > 3266.4;
 
 	uint diff = 3600 - averageVoltage;
 	test->log("voltage", averageVoltage);
