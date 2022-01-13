@@ -20,13 +20,13 @@ else()
     set(ArduinoLibs ~/Arduino/libraries)
 endif()
 
-include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.0/cores/esp8266)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/cores/esp8266)
 
-include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.0/libraries/CircuitOS/src)
-include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.0/libraries/TFT_eSPI)
-include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.0/libraries/TFT_eSPI/Extensions)
-include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.0/libraries/Nibble/src)
-include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.0/libraries/ESP8266WiFi/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/libraries/CircuitOS/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/libraries/TFT_eSPI)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/libraries/TFT_eSPI/Extensions)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/libraries/Nibble/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp8266/1.0.1/libraries/ESP8266WiFi/src)
 
 AUX_SOURCE_DIRECTORY(src SOURCES)
 AUX_SOURCE_DIRECTORY(src/Elements SOURCES)
@@ -43,7 +43,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build)
 SET_SOURCE_FILES_PROPERTIES(${CMAKE_PROJECT_NAME}.ino PROPERTIES LANGUAGE CXX)
 
 add_custom_command(OUTPUT ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_PROJECT_NAME}.ino.elf
-        COMMAND arduino-cli compile --fqbn ${DEVICE} --output-dir ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} ${CMAKE_PROJECT_NAME}.ino
+        COMMAND arduino-cli -v compile --fqbn ${DEVICE} --output-dir ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} ${CMAKE_PROJECT_NAME}.ino
         DEPENDS ${CMAKE_PROJECT_NAME}.ino ${SOURCES}
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
