@@ -44,7 +44,7 @@ void SleepService::startLightSleep()
 
 	instance->display->getBaseSprite()->clear(TFT_BLACK);
 	instance->display->commit();
-	I2cExpander::getInstance()->pinWrite(BL_PIN, 0);
+	Nibble.setBacklight(false);
 
 	Input::getInstance()->setAnyKeyCallback(wakeLightSleep, 1);
 	instance->sleepStatus = 1;
@@ -59,7 +59,7 @@ void SleepService::startLightSleep()
 void SleepService::wakeLightSleep()
 {
 	instance->sleepStatus = 0;
-	I2cExpander::getInstance()->pinWrite(BL_PIN, 1);
+	Nibble.setBacklight(true);
 
 	delay(100); // give the display some time to wake up from sleep
 
@@ -85,10 +85,7 @@ void SleepService::wakeLightSleep()
 void SleepService::shutdown()
 {
 
-	instance->display->getTft()->writecommand(16);
-	I2cExpander::getInstance()->pinWrite(BL_PIN, 0);
-	I2cExpander::getInstance()->portConfig(0xFFFF);
-	ESP.deepSleep(0);
+	Nibble.shutdown();
 }
 
 void SleepService::loop(uint _time)
