@@ -42,16 +42,26 @@ void setup(){
 	}
 
 #ifdef DEBUG_FLAG
-	LoopManager::addListener(new SerialID);
+	uint8_t portRead = 0;
 
-	for(uint8_t i = 0; i < 7; i++)
-	{
-		Nibble.getExpander()->pinMode(i, INPUT_PULLUP);
+	if(Nibble.getExpander()){
+		for(uint8_t i = 0; i < 7; i++){
+			Nibble.getExpander()->pinMode(i, INPUT_PULLUP);
+		}
+
+		portRead = Nibble.getExpander()->portRead();
+	}else{
+		Nibble.getInput()->loop(0);
+
+		for(int i = 0; i < 7; i++){
+			portRead |= (~Nibble.getInput()->getButtonState(i) & 1) << i;
+		}
 	}
-	uint8_t portRead = Nibble.getExpander()->portRead() & 0b01111111;
 
+	portRead = portRead & 0b01111111;
 	if(!portRead && !settings()->calibrated)
 	{
+		LoopManager::addListener(new SerialID);
 		HardwareTest test(*Nibble.getDisplay());
 		test.start();
 	}
