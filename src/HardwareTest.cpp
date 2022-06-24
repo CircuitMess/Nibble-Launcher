@@ -1,6 +1,6 @@
 #include "HardwareTest.h"
 #include <Audio/Piezo.h>
-#include "SettingsMenu/SettingsStruct.hpp"
+#include <Nibble.h>
 
 HardwareTest* HardwareTest::test = nullptr;
 

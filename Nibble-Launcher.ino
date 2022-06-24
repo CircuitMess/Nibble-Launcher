@@ -10,7 +10,6 @@
 #include "src/Launcher.h"
 #include "src/Services/BatteryService.h"
 #include "src/Services/SleepService.h"
-#include "src/SettingsMenu/SettingsStruct.hpp"
 #include "src/HardwareTest.h"
 #include "src/SerialID.h"
 
@@ -30,16 +29,6 @@ void setup(){
 
 	WiFi.mode(WIFI_OFF);
 	WiFi.forceSleepBegin();
-
-	Piezo.begin(BUZZ_PIN);
-
-	if(!Settings::init(new SettingsStruct, sizeof(SettingsStruct))){
-		settings()->shutdownTime = 300; //5 minutes
-		settings()->sleepTime = 30; //30 seconds
-		settings()->audio = true; //audio on
-		settings()->calibrated = false;
-		Settings::store();
-	}
 
 #ifdef DEBUG_FLAG
 	uint8_t portRead = 0;
@@ -83,6 +72,8 @@ void setup(){
 	launcher->start();
 	sleepService->start();
 	LoopManager::addListener(sleepService);
+
+	Nibble.setBacklight(true);
 }
 
 void loop(){

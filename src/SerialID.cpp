@@ -1,5 +1,5 @@
 #include "SerialID.h"
-#include "SettingsMenu/SettingsStruct.hpp"
+#include <Nibble.h>
 
 void SerialID::loop(uint micros){
 	if(Serial.available()){

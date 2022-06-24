@@ -6,7 +6,6 @@
 #include <Input/Input.h>
 #include <Loop/LoopManager.h>
 #include <Audio/Piezo.h>
-#include "SettingsMenu/SettingsStruct.hpp"
 #include "Services/BatteryService.h"
 
 Menu* Menu::instance = nullptr;

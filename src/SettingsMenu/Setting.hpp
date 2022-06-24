@@ -2,6 +2,8 @@
 #define SETTINGSTRUCT_H
 #include <Arduino.h>
 #include <Util/Vector.h>
+#include <string>
+
 namespace SettingsMenu
 {
 struct Setting

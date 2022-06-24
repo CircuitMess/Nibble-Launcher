@@ -3,7 +3,6 @@
 #include <Input/I2cExpander.h>
 #include <Nibble.h>
 #include <Loop/LoopManager.h>
-#include "../SettingsMenu/SettingsStruct.hpp"
 #include "BatteryService.h"
 
 SleepService* SleepService::instance = nullptr;

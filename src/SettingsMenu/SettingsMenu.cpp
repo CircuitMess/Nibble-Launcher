@@ -2,7 +2,6 @@
 #include "Setting.hpp"
 #include "Elements/NumericSettingElement.h"
 #include "Elements/BoolSettingElement.h"
-#include "SettingsStruct.hpp"
 #include <Audio/Piezo.h>
 #include "../Services/SleepService.h"
 
