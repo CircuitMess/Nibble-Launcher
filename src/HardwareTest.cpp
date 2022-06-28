@@ -17,6 +17,8 @@ void HardwareTest::start()
 	Serial.println();
 	Serial.printf("TEST:begin:%x\n", ESP.getChipId());
 
+	display->getTft()->init(INITR_GREENTAB3);
+
 	canvas->clear(TFT_WHITE);
 	canvas->setTextColor(TFT_BLACK);
 	canvas->setTextFont(2);
@@ -42,6 +44,10 @@ void HardwareTest::start()
 		display->commit();
 
 		if(!(pass &= result)) break;
+	}
+
+	if(pass){
+		settings()->displayTab = 1;
 	}
 
 	settings()->calibrated = pass;
